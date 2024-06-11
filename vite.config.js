@@ -12,25 +12,10 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
-      // workbox: {
-      //   runtimeCaching: [
-      //     {
-      //       urlPattern: ({ url }) => {
-      //         return url.pathname.startsWith('/');
-      //       },
-      //       handler: 'CacheFirst',
-      //       options: {
-      //         cacheName: 'bipagem-cache',
-      //         cacheableResponse: {
-      //           statuses: [0, 200],
-      //         },
-      //       },
-      //     },
-      //   ],
-      //   cleanupOutdatedCaches: false,
-      //   sourcemap: true,
-      //   globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-      // },
+      workbox: {
+        cleanupOutdatedCaches: false,
+        sourcemap: true,
+      },
       includeAssets: [
         'favicon.png',
         'android-chrome-192x192.png',
