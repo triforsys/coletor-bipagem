@@ -26,7 +26,7 @@ export default defineConfig({
         name: 'Bipagem',
         short_name: 'Bipagem',
         description: 'App para Bipagem.',
-        theme_color: '#BD34FE',
+        theme_color: '#602d00',
         icons: [
           {
             src: '/android-chrome-192x192.png',
