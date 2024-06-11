@@ -15,6 +15,8 @@ module.exports = {
       screens: {
         xs: '390px',
         sm: '576px',
+        md: '768px',
+        lg: '1024px',
         '2xl': '1400px',
       },
     },
@@ -60,9 +62,9 @@ module.exports = {
       },
       borderRadius: {
         xs: '390px',
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        md: 'calc(var(--radius) - 2px)',
+        lg: 'var(--radius)',
       },
       keyframes: {
         'accordion-down': {

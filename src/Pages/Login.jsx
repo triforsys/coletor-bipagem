@@ -35,20 +35,11 @@ export default function Login() {
     }
   }, []);
   return (
-    <div className="h-screen w-screen gap-10 lg:grid  lg:grid-cols-2 lg:gap-0  xl:min-h-screen bg-blue-900 font-poppins">
-      <div className="items-center justify-center  lg:bg-gray-100 ">
-        <span className=" grid  gap-3  sm:hidden lg:block">
-          <img
-            alt="Company"
-            className=" object-fill w-screen h-screen"
-            src={Company}
-          />
-        </span>
-      </div>
-      <div className="flex items-center justify-center p-6 xl:p-10">
+    <div className="h-screen w-screen flex items-center justify-center  xl:min-h-screen bg-zinc-50 font-poppins">
+      <div className="flex items-center justify-center p-6 xl:p-10 border-1 rounded bg-white drop-shadow-2xl">
         <div className="mx-auto w-[36rem] space-y-6 font-poppins">
           <div className="space-y-2 text-center flex flex-col">
-            <h1 className="text-3xl font-bold text-white">Login</h1>
+            <h1 className="text-3xl font-bold text-zinc-900">Login</h1>
             <span className="uppercase text-sm text-neutral-500">Bipagem</span>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
