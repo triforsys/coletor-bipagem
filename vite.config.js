@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      injectRegister: 'auto',
       registerType: 'autoUpdate',
       devOptions: {
         enabled: true,
@@ -14,6 +15,7 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: false,
         sourcemap: true,
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
       },
       includeAssets: [
         'favicon.png',
