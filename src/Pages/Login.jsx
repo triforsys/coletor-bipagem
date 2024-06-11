@@ -35,7 +35,7 @@ export default function Login() {
     }
   }, []);
   return (
-    <div className="h-screen w-screen gap-10 lg:grid  lg:grid-cols-2 lg:gap-0  xl:min-h-screen bg-blue-900 ">
+    <div className="h-screen w-screen gap-10 lg:grid  lg:grid-cols-2 lg:gap-0  xl:min-h-screen bg-blue-900 font-poppins">
       <div className="items-center justify-center  lg:bg-gray-100 ">
         <span className=" grid  gap-3  sm:hidden lg:block">
           <img
@@ -46,7 +46,7 @@ export default function Login() {
         </span>
       </div>
       <div className="flex items-center justify-center p-6 xl:p-10">
-        <div className="mx-auto w-[36rem] space-y-6 font-roboto">
+        <div className="mx-auto w-[36rem] space-y-6 font-poppins">
           <div className="space-y-2 text-center flex flex-col">
             <h1 className="text-3xl font-bold text-white">Login</h1>
             <span className="uppercase text-sm text-neutral-500">

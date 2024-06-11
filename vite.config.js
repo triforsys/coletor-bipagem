@@ -12,11 +12,25 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
-      workbox: {
-        cleanupOutdatedCaches: false,
-        sourcemap: true,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-      },
+      // workbox: {
+      //   runtimeCaching: [
+      //     {
+      //       urlPattern: ({ url }) => {
+      //         return url.pathname.startsWith('/');
+      //       },
+      //       handler: 'CacheFirst',
+      //       options: {
+      //         cacheName: 'bipagem-cache',
+      //         cacheableResponse: {
+      //           statuses: [0, 200],
+      //         },
+      //       },
+      //     },
+      //   ],
+      //   cleanupOutdatedCaches: false,
+      //   sourcemap: true,
+      //   globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+      // },
       includeAssets: [
         'favicon.png',
         'android-chrome-192x192.png',
@@ -24,7 +38,10 @@ export default defineConfig({
       ],
       manifest: {
         name: 'Bipagem',
-        short_name: 'Bipagem',
+        short_name: 'Bip',
+        display: 'standalone',
+        background_color: '#602d00',
+        start_url: '/',
         description: 'App para Bipagem.',
         theme_color: '#602d00',
         icons: [

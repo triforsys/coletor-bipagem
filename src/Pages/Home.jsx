@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       <Menu>
-        <h1 className="font-semibold">Bem vindo {user.login}!</h1>
+        <h1 className="font-poppins">Bem vindo {user.login}!</h1>
       </Menu>
     </>
   );

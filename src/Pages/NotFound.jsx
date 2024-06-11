@@ -6,7 +6,7 @@ export default function NotFound() {
     navigate(-1);
   };
   return (
-    <div className="flex flex-col min-h-[100vh]">
+    <div className="flex flex-col min-h-[100vh] font-poppins">
       <main className="flex-1 flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="space-y-2">
