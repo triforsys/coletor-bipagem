@@ -1,14 +1,14 @@
 {
-  "name": "acs-friozen",
+  "name": "bipagem-web",
   "private": true,
   "version": "1.0.2",
   "author": "Triforsys",
-  "description": "Monitor de Integracoes com Clientes Friozem",
+  "description": "Sistema de Bipagem",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/triforsys/acs-friozen.git"
+    "type": "bitbucket",
+    "url": "https://bitbucket.org/triforsys/bipagem-web/src/main/"
   },
-  "homepage": "https://bitbucket.org/triforsys/acs-friozen/src/main/README.md",
+  "homepage": "https://bitbucket.org/triforsys/bipagem-web/src/main/README.md",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
