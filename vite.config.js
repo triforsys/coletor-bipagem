@@ -42,7 +42,7 @@ export default defineConfig({
         display: 'standalone',
         display_override: ['window-controls-overlay'],
         lang: 'pt-br',
-        background_color: '#602d00',
+        background_color: '#f8fafc',
         start_url: '/',
         description: 'App para Bipagem.',
         theme_color: '#602d00',

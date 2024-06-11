@@ -1,9 +1,34 @@
-# React + Vite
+# Bipagem
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PWA para bipagem.
 
-Currently, two official plugins are available:
+## Referência
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-- [How to Merge Class Names in Tailwind and React](https://korayguler.medium.com/how-to-merge-react-and-tailwind-css-class-names-f5faeb10ed24)
+- [Vite](https://vitejs.dev/)
+- [Vite-plugin-pwa](https://vite-pwa-org.netlify.app/)
+- [Manifesto PWA](https://developer.mozilla.org/pt-BR/docs/Web/Manifest#implementando_um_manifesto)
+
+## Stack utilizada
+
+**Front-end:** React, Vite, TailwindCSS
+
+**Back-end:** Node, Fastify, Sql
+
+**Versão node:** ^18.17.0
+
+## Instalação
+
+Instale Bipagem-web com npm
+
+```bash
+  npm i
+```
+
+Para rodar o `PWA` localmente, execute o comando abaixo:
+
+```bash
+  npm run build
+  npm run preview
+```
+
+`OBS:` após rodar o comando `npm run preview`, as proximas vezes você pode usar o comando `npm run dev` para rodar o `PWA` localmente.
