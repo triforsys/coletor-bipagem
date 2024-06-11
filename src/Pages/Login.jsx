@@ -35,7 +35,7 @@ export default function Login() {
     }
   }, []);
   return (
-    <div className="h-screen w-screen flex items-center justify-center  xl:min-h-screen bg-zinc-50 font-poppins">
+    <div className="h-screen w-screen flex items-center justify-center  xl:min-h-screen bg-slate-50 font-poppins">
       <div className="flex items-center justify-center p-6 xl:p-10 border-1 rounded bg-white drop-shadow-2xl">
         <div className="mx-auto w-[36rem] space-y-6 font-poppins">
           <div className="space-y-2 text-center flex flex-col">
@@ -85,8 +85,9 @@ export default function Login() {
               Login
             </Button>
           </form>
-          <div className="flex items-center justify-center space-x-2 text-white">
-            Feito com ❤ Triforsys Versão: {version}
+          <div className="flex items-center justify-center space-x-2 text-zinc-900 font-poppins">
+            Feito com <span className="text-red-500 mx-1">❤</span> Triforsys
+            Versão: {version}
           </div>
         </div>
       </div>
