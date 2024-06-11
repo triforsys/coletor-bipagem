@@ -49,9 +49,7 @@ export default function Login() {
         <div className="mx-auto w-[36rem] space-y-6 font-poppins">
           <div className="space-y-2 text-center flex flex-col">
             <h1 className="text-3xl font-bold text-white">Login</h1>
-            <span className="uppercase text-sm text-neutral-500">
-              acs web KMC
-            </span>
+            <span className="uppercase text-sm text-neutral-500">Bipagem</span>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
