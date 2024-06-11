@@ -8,9 +8,7 @@ import { queryClient } from './lib/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { registerSW } from 'virtual:pwa-register';
 
-const updateSW = registerSW({
-  onOfflineReady() {},
-});
+registerSW();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

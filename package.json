@@ -1,7 +1,7 @@
 {
   "name": "acs-friozen",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Triforsys",
   "description": "Monitor de Integracoes com Clientes Friozem",
   "repository": {
