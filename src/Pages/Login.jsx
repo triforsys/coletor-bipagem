@@ -35,35 +35,22 @@ export default function Login() {
     }
   }, []);
   return (
-    <div className="h-screen w-screen flex items-center justify-center  xl:min-h-screen bg-slate-50 font-poppins">
-      <div className="flex items-center justify-center p-6 xl:p-10 border-1 rounded bg-white drop-shadow-2xl">
-        <div className="mx-auto w-[36rem] space-y-6 font-poppins">
-          <div className="space-y-2 text-center flex flex-col">
-            <h1 className="text-3xl font-bold text-zinc-900">Login</h1>
-            <span className="uppercase text-sm text-neutral-500">Bipagem</span>
-          </div>
+    <div className="h-screen w-screen flex items-center justify-center xl:min-h-screen font-poppins">
+      <div className="flex items-center justify-center">
+        <div className="mx-auto w-[376px] sm:w-[36rem] space-y-6">
           <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-white" htmlFor="email">
-                Usuário
-              </Label>
               <Input
                 id="email"
                 value={login}
                 onChange={(e) => setLogin(e.target.value.trim())}
-                placeholder="Usuário"
+                placeholder="Digite seu e-mail"
                 type="text"
               />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-white" htmlFor="password">
-                Senha
-              </Label>
               <div className="relative">
                 <Input
                   className="pr-10"
                   id="password"
-                  placeholder="Senha"
+                  placeholder="Digite sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value.trim())}
                   type={!showPassword ? 'password' : 'text'}
@@ -79,13 +66,12 @@ export default function Login() {
                   )}
                 </span>
               </div>
-            </div>
 
             <Button className="w-full" type="submit">
-              Login
+              ENTRAR
             </Button>
           </form>
-          <div className="flex items-center justify-center space-x-2 text-zinc-900 font-poppins">
+          <div className="flex items-center justify-center space-x-2 text-zinc-900">
             Feito com <span className="text-red-500 mx-1">❤</span> Triforsys
             Versão: {version}
           </div>
