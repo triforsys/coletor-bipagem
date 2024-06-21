@@ -34,7 +34,7 @@ export default function Login() {
     }
   }, []);
   return (
-    <div className="h-screen p- w-screen flex items-center bg-slate-50 justify-center xl:min-h-screen font-poppins">
+    <div className="h-screen w-screen flex items-center bg-slate-50 justify-center xl:min-h-screen font-poppins">
       <div className="flex items-center justify-center">
         <div className="mx-auto w-[350px] sm:w-[36rem] space-y-6">
           <div className="flex">

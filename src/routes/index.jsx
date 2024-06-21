@@ -11,14 +11,15 @@ export default function Rotas() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route
+        <Route path="/home" element={<Home />} />
+        {/* <Route
           path="/home"
           element={
             <PrivateRoute>
               <Home />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/inteliPost/ocorrencia"
           element={
