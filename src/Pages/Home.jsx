@@ -3,8 +3,11 @@ import { userDecode } from '../lib/jwtDecode';
 import Menu from '@/components/layout/Menu';
 import { CaravanIcon, TruckIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 export default function Home() {
   // const [user, setUser] = useState(userDecode());
+
+  const navigate = useNavigate();
 
   const reportList = [
     {
@@ -33,12 +36,14 @@ export default function Home() {
     },
   ];
 
+  const redirectToReportPage = (collect) => navigate(`/coleta/${collect}`)
+
   const CardReport = ({ children: report }) => {
     return (
-      <div className="flex rounded-2xl bg-[#f3f3f3] w-[370px] sm:w-[36rem] h-[171px] gap-2">
-        <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-[#D5CEA3]">
+      <div className="flex rounded-2xl bg-[#f3f3f3] min-w-[370px] sm:w-96 h-[171px] gap-2">
+        <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
           <TruckIcon className="w-[78px] h-[75px]" />
-          <Button className="rounded-[10px] w-20 h-6">Iniciar</Button>
+          <Button className="rounded-[10px] w-20 h-6" onClick={() => redirectToReportPage(report.collect)}>Iniciar</Button>
         </div>
         <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
           <p className="font-bold">Coleta: {report.collect}</p>
@@ -54,7 +59,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4">
         {reportList.map((report) => (
           <CardReport key={report.collect}>{report}</CardReport>
         ))}

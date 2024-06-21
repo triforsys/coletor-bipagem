@@ -5,6 +5,7 @@ import Home from '@/Pages/Home';
 import { PrivateRoute } from './privateRoutes';
 import Ocorrencia from '@/Pages/Ocorrencia';
 import Comprovante from '@/Pages/Comprovante';
+import Report from '@/Pages/Report';
 
 export default function Rotas() {
   return (
@@ -12,6 +13,7 @@ export default function Rotas() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/coleta/:id" element={<Report />}  />
         {/* <Route
           path="/home"
           element={
