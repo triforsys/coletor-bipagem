@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 
 import packageJson from '../../package.json';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
@@ -35,41 +34,48 @@ export default function Login() {
     }
   }, []);
   return (
-    <div className="h-screen w-screen flex items-center justify-center xl:min-h-screen font-poppins">
+    <div className="h-screen p- w-screen flex items-center bg-slate-50 justify-center xl:min-h-screen font-poppins">
       <div className="flex items-center justify-center">
-        <div className="mx-auto w-[376px] sm:w-[36rem] space-y-6">
+        <div className="mx-auto w-[350px] sm:w-[36rem] space-y-6">
+          <div className="flex">
+            <h1 className="mx-auto text-2xl text-neutral-500">Sistema de bipagem coletor</h1>
+          </div>
           <form onSubmit={handleLogin} className="space-y-4">
+            <Input
+              id="email"
+              value={login}
+              onChange={(e) => setLogin(e.target.value.trim())}
+              placeholder="Digite seu e-mail"
+              type="text"
+            />
+            <div className="relative">
               <Input
-                id="email"
-                value={login}
-                onChange={(e) => setLogin(e.target.value.trim())}
-                placeholder="Digite seu e-mail"
-                type="text"
+                className="pr-10"
+                id="password"
+                placeholder="Digite sua senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value.trim())}
+                type={!showPassword ? 'password' : 'text'}
               />
-              <div className="relative">
-                <Input
-                  className="pr-10"
-                  id="password"
-                  placeholder="Digite sua senha"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value.trim())}
-                  type={!showPassword ? 'password' : 'text'}
-                />
-                <span
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 "
-                >
-                  {!showPassword ? (
-                    <Eye className="h-5 w-5 text-gray-400 dark:text-gray-300" />
-                  ) : (
-                    <EyeOff className="h-5 w-5 text-gray-400 dark:text-gray-300" />
-                  )}
-                </span>
-              </div>
-
-            <Button className="w-full" type="submit">
-              ENTRAR
-            </Button>
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 "
+              >
+                {!showPassword ? (
+                  <Eye className="h-5 w-5 text-gray-400 dark:text-gray-300" />
+                ) : (
+                  <EyeOff className="h-5 w-5 text-gray-400 dark:text-gray-300" />
+                )}
+              </span>
+            </div>
+            <div>
+              <Button
+                className="w-full bg-[#1A120B] rounded-none"
+                type="submit"
+              >
+                ENTRAR
+              </Button>
+            </div>
           </form>
           <div className="flex items-center justify-center space-x-2 text-zinc-900">
             Feito com <span className="text-red-500 mx-1">❤</span> Triforsys
