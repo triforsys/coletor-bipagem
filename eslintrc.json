@@ -1,0 +1,42 @@
+{
+    "env": {
+      "commonjs": true,
+      "es2021": true,
+      "node": true
+    },
+    "extends": ["@rocketseat/eslint-config/node", "prettier"],
+    "parserOptions": {
+      "ecmaVersion": "latest"
+    },
+    "rules": {
+      "endOfLine": "off",
+      "camelcase": "off",
+      "no-unused-vars": "warn",
+      "object-curly-newline": "off",
+      "array-callback-return": "off",
+      "implicit-arrow-linebreak": "off",
+      "no-plusplus": "off",
+      "no-useless-return": "off",
+      "import/prefer-default-export": "off",
+      "radix": "off",
+      "import/extensions": "off",
+      "import/no-extraneous-dependencies": "off",
+      "no-restricted-syntax": "off",
+      "comma-dangle": "off",
+      "semi": ["error", "never"],
+      "quotes": [
+        "error",
+        "single",
+        {
+          "avoidEscape": true,
+          "allowTemplateLiterals": true
+        }
+      ],
+      "import/no-unresolved": [
+        "error",
+        {
+          "commonjs": true
+        }
+      ]
+    }
+  }
