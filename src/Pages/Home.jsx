@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { userDecode } from '../lib/jwtDecode';
 import Menu from '@/components/layout/Menu';
-import { CaravanIcon, TruckIcon } from 'lucide-react';
+import { TruckIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 export default function Home() {
