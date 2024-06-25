@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import SidebarItem from '@/components/layout/SidebarItem';
-import logo from '../../../assets/Logo_KMC.png';
 import {
   Command,
   CommandGroup,

@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import Company from '../assets/kmc.png';
 
 export default function Login() {
   const { version } = packageJson;
