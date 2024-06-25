@@ -34,8 +34,8 @@ let list = [
 
 const CardReport = ({ children: report }) => {
   return (
-    <div className="flex rounded-2xl bg-[#f3f3f3] w-[370px] sm:w-[36rem] h-[171px] gap-2">
-      <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-[#D5CEA3]">
+    <div className="flex rounded-2xl card-shadow w-[370px] sm:w-[36rem] h-[171px] gap-2">
+      <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
         <ClipboardList className="w-[78px] h-[75px]" />
       </div>
       <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
@@ -69,7 +69,7 @@ const CardInfo = () => {
     driverName: 'Rafael Silvw',
   };
   return (
-    <div className="flex rounded-2xl bg-slate-50 w-[370px] sm:w-[36rem] min-h-24 gap-3">
+    <div className="flex rounded-2xl card-shadow w-[370px] sm:w-[36rem] min-h-24 gap-3">
       <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-black text-white text-md font-bold">
         Carga:
         <p className="text-3xl">{report.collect}</p>
@@ -135,9 +135,10 @@ export default function Report() {
         <div className="flex gap-2 items-center w-[370px] sm:w-[36rem]">
           <Input
             type="number"
+            placeholder="Número de O.T"
             onChange={handleOt}
             ref={otRef}
-            className="rounded-[5px] bg-white border-black md:w-52 h-10 focus-visible:ring-offset-background focus-visible:ring-transparent text-2xl"
+            className="rounded-[5px] bg-white border-black md:w-52 h-10 focus-visible:ring-offset-background focus-visible:ring-transparent text-2xl placeholder:text-sm placeholder:flex"
           />
           <Select
             options={[
