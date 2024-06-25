@@ -33,16 +33,7 @@ export default function Sidebar({ children }) {
     {
       group: 'InteliPost',
       items: [
-        {
-          link: '/inteliPost/ocorrencia',
-          icon: <Book />,
-          text: 'API Ocorrência',
-        },
-        {
-          link: '/inteliPost/comprovante',
-          icon: <File />,
-          text: 'API Canhoto',
-        },
+        
       ],
     },
   ];

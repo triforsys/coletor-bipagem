@@ -3,8 +3,6 @@ import NotFound from '../Pages/NotFound';
 import Login from '../Pages/Login';
 import Home from '@/Pages/Home';
 import { PrivateRoute } from './privateRoutes';
-import Ocorrencia from '@/Pages/Ocorrencia';
-import Comprovante from '@/Pages/Comprovante';
 import Report from '@/Pages/Report';
 
 export default function Rotas() {
@@ -22,32 +20,6 @@ export default function Rotas() {
             </PrivateRoute>
           }
         /> */}
-        <Route
-          path="/inteliPost/ocorrencia"
-          element={
-            <PrivateRoute>
-              <Ocorrencia />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/inteliPost/comprovante"
-          element={
-            <PrivateRoute>
-              <Comprovante />
-            </PrivateRoute>
-          }
-        />
-        {/* <Route path="/home" element={<PrivateRoute />}>
-          <Route path="/home" element={<Home />} />
-        </Route> */}
-
-        {/* <Route path="/khan/autorizacao/pagamento" element={<PrivateRoute />}>
-          <Route
-            path="/khan/autorizacao/pagamento"
-            element={<AutorizacaoPagamento />}
-          />
-        </Route> */}
 
         <Route path="*" element={<NotFound />} />
       </Routes>
