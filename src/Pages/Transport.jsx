@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import Select from '@/components/utils/Select';
 
-const formatCNPJ = (cnpj) => cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+const formatCNPJ = (cnpj) =>
+  cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
 
 let list = [
   {
@@ -68,6 +69,7 @@ const CardInfo = () => {
     plate: 'ABC-1234',
     driverName: 'Rafael Silvw',
   };
+
   return (
     <div className="flex rounded-2xl card-shadow w-[370px] sm:w-[36rem] min-h-24 gap-3">
       <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-black text-white text-md font-bold">
@@ -117,7 +119,7 @@ export default function Report() {
     );
   };
 
-  const redirectToHomePage = () => navigate(`/home`);
+  const redirectToHomePage = () => navigate(`/coletas`);
 
   useEffect(() => {
     setFilteredList(list);
@@ -134,11 +136,10 @@ export default function Report() {
         <CardInfo />
         <div className="flex gap-2 items-center w-[370px] sm:w-[36rem]">
           <Input
-            type="number"
             placeholder="Número de O.T"
             onChange={handleOt}
             ref={otRef}
-            className="rounded-[5px] bg-white border-black md:w-52 h-10 focus-visible:ring-offset-background focus-visible:ring-transparent text-2xl placeholder:text-sm placeholder:flex"
+            className="rounded-[5px] bg-white border-black md:w-52 h-10 focus-visible:ring-offset-background focus-visible:ring-transparent text-xl"
           />
           <Select
             options={[
@@ -155,6 +156,7 @@ export default function Report() {
                 value: 'pending',
               },
             ]}
+            className="border-black"
             InitialTextOption=""
             handleValueChange={handleStatus}
             valueSelected="all"

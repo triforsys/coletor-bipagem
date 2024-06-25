@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { userDecode } from '../lib/jwtDecode';
 import Menu from '@/components/layout/Menu';
-import { TruckIcon } from 'lucide-react';
+import { BoxIcon, TruckIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-export default function Home() {
+export default function Collects() {
   // const [user, setUser] = useState(userDecode());
 
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ export default function Home() {
     return (
       <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[171px] gap-2">
         <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
-          <TruckIcon className="w-[78px] h-[75px]" />
+          <BoxIcon className="w-[78px] h-[75px]" />
           {buttonType === 'released' ? (
             <Button
               className="rounded-[10px] w-20 h-6"

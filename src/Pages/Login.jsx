@@ -20,7 +20,7 @@ export default function Login() {
     try {
       const response = await signIn({ login, password });
       if (signed || response) {
-        navigate('/home');
+        navigate('/coletas');
       }
     } catch (err) {
       console.error(err);
@@ -29,7 +29,7 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('@Auth:token')) {
-      navigate('/home');
+      navigate('/coletas');
     }
   }, []);
   return (
