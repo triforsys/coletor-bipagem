@@ -11,47 +11,36 @@ export default function Collect() {
 
   const reportList = [
     {
-      transport: 175582,
+      charge: 175582,
+      campaign: 'M&N_BISC_BYTES_MONT_SJ',
+      region: 'AL_MA_PB_PE_RN_SE',
       transporter: 'TAFF',
-      vehicle: 'Carreta',
-      plate: 'ABC-1234',
-      dock: '24',
-      driverName: 'Rafael Silva',
-      statusColeta: 'acionada',
-      invoiced: 0,
-      readVolumes: 1,
+      boxes: 2665,
     },
     {
-      transport: 175583,
-      transporter: 'KMC',
-      vehicle: 'Carreta',
-      plate: 'ABC-1235',
-      dock: '25',
-      driverName: 'Junior Silva',
-      statusColeta: '',
-      invoiced: 0,
-      readVolumes: 1,
+      charge: 175583,
+      campaign: 'M&N_BYTES_MONT',
+      region: 'LINHA',
+      transporter: 'TAFF',
+      boxes: 4532,
     },
     {
-      transport: 175584,
-      transporter: 'PTS',
-      vehicle: 'Carreta',
-      plate: 'ABC-1236',
-      dock: '26',
-      driverName: 'Mateus Oliveira',
-      statusColeta: '',
-      invoiced: 1,
-      readVolumes: 0,
+      charge: 175584,
+      campaign: 'COMERCIAL FERNANDES STL LTDA',
+      region: 'AL_MA_PB_PE_RN_SE',
+      transporter: 'TAFF',
+      boxes: 1234,
     },
   ];
 
-  const redirectToTransportPage = (transport) => navigate(`/transporte/${transport}`);
+  const redirectToTransportPage = (transport) =>
+    navigate(`/transporte/${transport}`);
 
   const CardReport = ({ children: report }) => {
     return (
-      <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[171px] gap-2">
-        <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
-          <TruckIcon className="w-[78px] h-[75px]" />
+      <div className="flex rounded-2xl max-sm: card-shadow min-w-[370px] max-w-[370px] text-ellipsis overflow-hidden pr-1 sm:w-96 h-[180px] gap-2">
+        <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-slate-400">
+          <BoxIcon className="w-[78px] h-[75px]" />
           <Button
             className="rounded-[10px] w-20 h-6"
             onClick={() => redirectToTransportPage(report.transport)}
@@ -59,14 +48,12 @@ export default function Collect() {
             Iniciar
           </Button>
         </div>
-        <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">Transporte: {report.transport}</p>
-
-          <p>Transportadora: {report.transporter}</p>
-          <p>Tipo Veículo: {report.vehicle}</p>
-          <p>Placa Veículo: {report.plate}</p>
-          <p>Doca: {report.dock}</p>
-          <p>N. Motorista: {report.driverName}</p>
+        <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
+          <p className="font-bold">Carga: {report.charge}</p>
+          <p className='text-ellipsis overflow-hidden'>Campanha: {report.campaign}</p>
+          <p className='text-ellipsis overflow-hidden'>Região: {report.region}</p>
+          <p className='text-ellipsis overflow-hidden'>Transportadora: {report.transporter}</p>
+          <p>Caixas: {report.boxes}</p>
         </div>
       </div>
     );
@@ -81,7 +68,7 @@ export default function Collect() {
           </h1>
         </div>
         {reportList.map((report) => (
-          <CardReport key={report.transport}>{report}</CardReport>
+          <CardReport key={report.charge}>{report}</CardReport>
         ))}
       </div>
     </div>

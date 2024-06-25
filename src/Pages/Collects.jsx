@@ -63,7 +63,7 @@ export default function Collects() {
     return (
       <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[171px] gap-2">
         <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
-          <BoxIcon className="w-[78px] h-[75px]" />
+          <TruckIcon className="w-[78px] h-[75px]" />
           {buttonType === 'released' ? (
             <Button
               className="rounded-[10px] w-20 h-6"
