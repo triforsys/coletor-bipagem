@@ -104,7 +104,7 @@ export default function Report() {
   };
 
   const handleStatus = (value) => {
-    if (value === 'all') {
+    if (value === 'all' || !value) {
       setFilteredList(getFilterListByOt);
       return;
     }
