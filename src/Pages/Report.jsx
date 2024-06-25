@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import Select from '@/components/utils/Select';
 
+const formatCNPJ = (cnpj) => cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+
 let list = [
   {
     ot: 175582,
@@ -62,6 +64,7 @@ const CardReport = ({ children: report }) => {
 const CardInfo = () => {
   const report = {
     collect: 175582,
+    cnpj: '43805810000128',
     transporter: 'TAFF BRASIL TRANSPORTES LTDA',
     plate: 'ABC-1234',
     driverName: 'Rafael Silvw',
@@ -74,7 +77,8 @@ const CardInfo = () => {
       </div>
       <div className="flex flex-col gap-1 py-2 text-[15px]">
         <p>Nome Transportador: </p>
-        <p className="">{report.transporter}</p>
+        <p>{report.transporter}</p>
+        <p>CNPJ: {formatCNPJ(report.cnpj)}</p>
         <div className="flex gap-4">
           <p>{report.plate}</p>
           <p>{report.driverName}</p>
@@ -89,10 +93,10 @@ export default function Report() {
   const [filteredList, setFilteredList] = useState([]);
   const navigate = useNavigate();
 
-  const otRef = useRef()
+  const otRef = useRef();
 
   const getFilterListByOt = () => {
-    const ot = otRef.current.value
+    const ot = otRef.current.value;
 
     if (ot.length < 5) return list;
 
