@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { userDecode } from '../lib/jwtDecode';
-import Menu from '@/components/layout/Menu';
-import { BoxIcon, TruckIcon } from 'lucide-react';
+import { BoxIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import Toggle from '@/components/utils/Toggle';
 import { Input } from '@/components/ui/input';
-import DatePiker from '@/components/utils/DatePiker';
 
 const reportList = [
   {
@@ -48,10 +46,10 @@ export default function Collect() {
   const CardReport = ({ children: report }) => {
     return (
       <div className="flex rounded-2xl card-shadow min-w-[370px] max-w-[370px] text-ellipsis overflow-hidden pr-1 sm:w-96 h-[180px] gap-2">
-        <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-slate-400">
-          <BoxIcon className="w-[78px] h-[75px]" />
+        <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
+          <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
           <Button
-            className="rounded-[10px] w-20 h-6"
+            className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
             onClick={() => redirectToTransportPage(report.charge)}
           >
             Iniciar
@@ -100,7 +98,7 @@ export default function Collect() {
             <form className="flex flex-col gap-2" onSubmit={filter}>
               <div className="flex flex-wrap items-end">
                 <div className=" w-full md:w-2/4">
-                  <label htmlFor="input-charge" className="gap-1">
+                  <label htmlFor="input-charge" className="text-white gap-1">
                     Carga
                   </label>
                   <Input
@@ -110,8 +108,8 @@ export default function Collect() {
                   />
                 </div>
                 <div className=" w-full md:w-2/4"></div>
-                <div className=" mt-4 justify-end w-full md:w-24">
-                  <Button className="h-10  button">
+                <div className="flex mt-4 justify-end w-full md:w-24">
+                  <Button className="w-full h-10 bg-tangaroa-400 hover:bg-tangaroa-300">
                     Filtrar
                   </Button>
                 </div>

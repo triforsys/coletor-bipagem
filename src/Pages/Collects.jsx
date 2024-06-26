@@ -62,8 +62,8 @@ export default function Collects() {
 
     return (
       <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[171px] gap-2">
-        <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
-          <TruckIcon className="w-[78px] h-[75px]" />
+        <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
+          <TruckIcon className="w-[78px] h-[75px] text-tangaroa-100" />
           {buttonType === 'released' ? (
             <Button
               className="rounded-[10px] w-20 h-6"
@@ -82,8 +82,8 @@ export default function Collects() {
           <p>Transportadora: {report.transporter}</p>
           <p>Tipo Veículo: {report.vehicle}</p>
           <p>Placa Veículo: {report.plate}</p>
+          <p>Motorista: {report.driverName}</p>
           <p>Doca: {report.dock}</p>
-          <p>N. Motorista: {report.driverName}</p>
         </div>
       </div>
     );

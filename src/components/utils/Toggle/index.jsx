@@ -22,7 +22,7 @@ export default function Toggle({ children }) {
       </div>
       <div
         ref={divRef}
-        className="hidden bg-slate-200 rounded-sm card-shadow p-4 my-3"
+        className="hidden bg-tangaroa-500 rounded-sm card-shadow p-4 my-3"
       >
         {children}
       </div>

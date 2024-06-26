@@ -27,10 +27,10 @@ export default defineConfig({
         display: 'standalone',
         display_override: ['window-controls-overlay'],
         lang: 'pt-br',
-        background_color: '#f8fafc',
+        background_color: '#137bff',
         start_url: '/',
         description: 'App para Bipagem.',
-        theme_color: '#602d00',
+        theme_color: '#137bff',
         icons: [
           {
             src: '/android-chrome-192x192.png',
