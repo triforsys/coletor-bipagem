@@ -37,7 +37,7 @@ export default function Select({
           role="combobox"
           aria-expanded={open}
           aria-label={InitialTextOption}
-          className={`w-[${size}px] justify-between border-black h-full`}
+          className={`w-[${size}px] justify-between border-black h-full max-h-10`}
         >
           {value
             ? options.find((option) => option.value === value.toString())?.label

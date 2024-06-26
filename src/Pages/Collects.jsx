@@ -11,7 +11,7 @@ export default function Collects() {
 
   const reportList = [
     {
-      collect: 175582,
+      collect: 1234,
       transporter: 'TAFF',
       vehicle: 'Carreta',
       plate: 'ABC-1234',
@@ -22,23 +22,23 @@ export default function Collects() {
       readVolumes: 1,
     },
     {
-      collect: 175583,
-      transporter: 'KMC',
-      vehicle: 'Carreta',
-      plate: 'ABC-1235',
+      collect: 198173,
+      transporter: 'TAFF',
+      vehicle: 'CARRETA',
+      plate: '',
       dock: '25',
-      driverName: 'Junior Silva',
+      driverName: '',
       statusColeta: '',
       invoiced: 0,
       readVolumes: 1,
     },
     {
-      collect: 175584,
-      transporter: 'PTS',
-      vehicle: 'Carreta',
-      plate: 'ABC-1236',
+      collect: 198174,
+      transporter: 'TAFF',
+      vehicle: 'TRUCK',
+      plate: '',
       dock: '26',
-      driverName: 'Mateus Oliveira',
+      driverName: '',
       statusColeta: '',
       invoiced: 1,
       readVolumes: 0,
@@ -92,8 +92,8 @@ export default function Collects() {
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
       <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4">
-        {reportListFiltered.map((report) => (
-          <CardReport key={report.collect}>{report}</CardReport>
+        {reportListFiltered.map((report, index) => (
+          <CardReport key={report.collect + index}>{report}</CardReport>
         ))}
       </div>
     </div>

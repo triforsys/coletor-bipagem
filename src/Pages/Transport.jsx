@@ -63,7 +63,7 @@ const CardReport = ({ children: report }) => {
 
 const CardInfo = () => {
   const report = {
-    collect: 175582,
+    charge: window.location.pathname.split('/')[2],
     cnpj: '43805810000128',
     transporter: 'TAFF BRASIL TRANSPORTES LTDA',
     plate: 'ABC-1234',
@@ -74,7 +74,7 @@ const CardInfo = () => {
     <div className="flex rounded-2xl card-shadow w-[370px] sm:w-[36rem] min-h-24 gap-3">
       <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-black text-white text-md font-bold">
         Carga:
-        <p className="text-3xl">{report.collect}</p>
+        <p className="text-3xl">{report.charge}</p>
       </div>
       <div className="flex flex-col gap-1 py-2 text-[15px]">
         <p>Nome Transportador: </p>
@@ -127,7 +127,7 @@ export default function Report() {
 
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
-      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4">
+      <div className="flex flex-wrap justify-center xl:justify-normal p-4 gap-4">
         <div className="w-full">
           <h1 className="text-center text-neutral-500 text-2xl">
             Relatório de Carregamento Remessa / Conferência
@@ -163,8 +163,8 @@ export default function Report() {
           />
         </div>
 
-        {filteredList.map((report) => (
-          <CardReport key={report.ot}>{report}</CardReport>
+        {filteredList.map((report, index) => (
+          <CardReport key={report.ot + index}>{report}</CardReport>
         ))}
         <div className="w-full text-center">
           <Button

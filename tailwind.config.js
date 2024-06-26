@@ -59,6 +59,19 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        tangaroa: {
+          50: '#e4f8ff',
+          100: '#cff1ff',
+          200: '#a8e3ff',
+          300: '#74cdff',
+          400: '#3ea5ff',
+          500: '#137bff',
+          600: '#0069ff',
+          700: '#0069ff',
+          800: '#005ee4',
+          900: '#0043b0',
+          950: '#001439'
+        }
       },
       borderRadius: {
         xs: '390px',

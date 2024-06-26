@@ -117,4 +117,14 @@
     background-color: theme('colors.white');
     box-shadow: theme('dropShadow.xl');
   }
+
+  .button {
+   background-color: theme('colors.tangaroa.600')!important; 
+   color: theme('colors.white')!important; 
+
+   &:hover {
+     background-color: theme('colors.tangaroa.500')!important; 
+     color: theme('colors.white')!important; 
+   }
+  }
 }
