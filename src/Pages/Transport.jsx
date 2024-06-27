@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { userDecode } from '../lib/jwtDecode';
-import { ClipboardList, CircleCheck, X, CircleX } from 'lucide-react';
+import { ClipboardList, CircleCheck, X, CircleX, BoxIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
@@ -33,33 +33,33 @@ let list = [
   },
 ];
 
-const CardReport = ({ children: report }) => {
-  return (
-    <div className="flex rounded-2xl card-shadow w-[370px] sm:w-[36rem] h-[171px] gap-2">
-      <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
-        <ClipboardList className="w-[78px] h-[75px]" />
-      </div>
-      <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
-        <p className="font-bold">O.T: {report.ot}</p>
-        <p>Cliente: {report.costumer}</p>
-        <p>Remessa: {report.shipping}</p>
-        <p>Nota: {report.invoice}</p>
-        <div className="flex justify-around">
-          <CircleCheck
-            className="fill-green-500 text-white"
-            size={50}
-            cursor="pointer"
-          />
-          <CircleX
-            className="fill-red-500 text-white"
-            size={50}
-            cursor="pointer"
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
+// const CardReport = ({ children: report }) => {
+//   return (
+//     <div className="flex rounded-2xl card-shadow w-[370px] sm:w-[36rem] h-[171px] gap-2">
+//       <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-slate-400">
+//         <ClipboardList className="w-[78px] h-[75px]" />
+//       </div>
+//       <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
+//         <p className="font-bold">O.T: {report.ot}</p>
+//         <p>Cliente: {report.costumer}</p>
+//         <p>Remessa: {report.shipping}</p>
+//         <p>Nota: {report.invoice}</p>
+//         <div className="flex justify-around">
+//           <CircleCheck
+//             className="fill-green-500 text-white"
+//             size={50}
+//             cursor="pointer"
+//           />
+//           <CircleX
+//             className="fill-red-500 text-white"
+//             size={50}
+//             cursor="pointer"
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const CardInfo = () => {
   const report = {
@@ -84,6 +84,34 @@ const CardInfo = () => {
           <p>{report.plate}</p>
           <p>{report.driverName}</p>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const CardReport = ({ children: report }) => {
+  return (
+    <div className="flex rounded-2xl card-shadow min-w-[370px] max-w-[370px] text-ellipsis overflow-hidden pr-1 sm:w-96 h-[180px] gap-2">
+      <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
+        <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
+        <Button
+          className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
+          // onClick={() => redirectToTransportPage(report.charge)}
+        >
+          Iniciar
+        </Button>
+      </div>
+      <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
+        <p className="font-bold">Transporte: {report.charge}</p>
+        <p className="text-ellipsis overflow-hidden">
+          Campanha: {report.campaign}
+        </p>
+        <p className="text-ellipsis overflow-hidden">Região: {report.region}</p>
+        <div className="flex gap-3">
+          <p className="text-ellipsis overflow-hidden">Peso: {report.weight}</p>
+          <p className="text-ellipsis overflow-hidden">M3: {report.m3}</p>
+        </div>
+        <p>Caixas: {report.boxes}</p>
       </div>
     </div>
   );
@@ -133,7 +161,17 @@ export default function Report() {
             Relatório de Carregamento Remessa / Conferência
           </h1>
         </div>
-        <CardInfo />
+        {/* <CardInfo /> */}
+        <CardReport
+          children={{
+            charge: 198179,
+            campaign: 'M&N_BISC_BYTES_MONT_SJ',
+            region: 'BA',
+            boxes: 980,
+            weight: 13061.02,
+            m3: 14.41,
+          }}
+        />
         <div className="flex gap-2 items-center w-[370px] sm:w-[36rem]">
           <Input
             placeholder="Número de O.T"
@@ -163,9 +201,9 @@ export default function Report() {
           />
         </div>
 
-        {filteredList.map((report, index) => (
+        {/* {filteredList.map((report, index) => (
           <CardReport key={report.ot + index}>{report}</CardReport>
-        ))}
+        ))} */}
         <div className="w-full text-center">
           <Button
             className="w-full bg-[#1A120B] rounded-none max-w-96"

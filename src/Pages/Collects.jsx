@@ -66,13 +66,13 @@ export default function Collects() {
           <TruckIcon className="w-[78px] h-[75px] text-tangaroa-100" />
           {buttonType === 'released' ? (
             <Button
-              className="rounded-[10px] w-20 h-6"
+              className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
               onClick={() => redirectToReportPage(report.collect)}
             >
               Iniciar
             </Button>
           ) : (
-            <Button className="rounded-[10px] w-20 h-6 text-xs" disabled>
+            <Button className="rounded-[10px] w-20 h-6 text-xs disabled:bg-tangaroa-100 disabled:text-tangaroa-950" disabled>
               Em progresso
             </Button>
           )}

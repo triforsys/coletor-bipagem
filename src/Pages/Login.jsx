@@ -69,7 +69,7 @@ export default function Login() {
             </div>
             <div>
               <Button
-                className="w-full bg-[#1A120B] rounded-none"
+                className="w-full button rounded-none"
                 type="submit"
               >
                 ENTRAR
