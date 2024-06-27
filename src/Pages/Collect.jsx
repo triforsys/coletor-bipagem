@@ -11,15 +11,17 @@ const reportList = [
     charge: 198174,
     campaign: 'LINHA',
     region: 'BA',
-    transporter: 'TAFF',
     boxes: 2024,
+    weight: 13061.02,
+    m3: 14.41,
   },
   {
     charge: 198179,
     campaign: 'M&N_BISC_BYTES_MONT_SJ',
     region: 'BA',
-    transporter: 'TAFF',
     boxes: 980,
+    weight: 13061.02,
+    m3: 14.41,
   },
   // {
   //   charge: 175584,
@@ -56,16 +58,21 @@ export default function Collect() {
           </Button>
         </div>
         <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">Carga: {report.charge}</p>
+          <p className="font-bold">Transporte: {report.charge}</p>
           <p className="text-ellipsis overflow-hidden">
             Campanha: {report.campaign}
           </p>
           <p className="text-ellipsis overflow-hidden">
             Região: {report.region}
           </p>
-          <p className="text-ellipsis overflow-hidden">
-            Transportadora: {report.transporter}
-          </p>
+          <div className="flex gap-3">
+            <p className="text-ellipsis overflow-hidden">
+              Peso: {report.weight}
+            </p>
+            <p className="text-ellipsis overflow-hidden">
+              M3: {report.m3}
+            </p>
+          </div>
           <p>Caixas: {report.boxes}</p>
         </div>
       </div>
