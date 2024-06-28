@@ -86,22 +86,6 @@ export default function Report() {
     return false;
   };
 
-  useEffect(() => {
-    let index = 0;
-    setInterval((e) => {
-      if (!list[index]) {
-        alert('Bipagem finalizada')
-        e.clearInterval();
-        return
-      }
-
-      const error = handleBarcode(list[index]);
-      if (error) return;
-
-      index++;
-    }, [5000]);
-  }, []);
-
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
       <div className="flex flex-wrap justify-center xl:justify-normal p-4 gap-4">
