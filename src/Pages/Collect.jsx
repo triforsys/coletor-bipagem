@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { userDecode } from '../lib/jwtDecode';
-import { BoxIcon } from 'lucide-react';
+import { BoxIcon, ChevronLeftIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import Toggle from '@/components/utils/Toggle';
@@ -38,6 +38,8 @@ export default function Collect() {
   const navigate = useNavigate();
   const [filteredList, setFilteredList] = useState([]);
 
+  const goBack = () => navigate(-1);
+
   useEffect(() => {
     setFilteredList(reportList);
   }, []);
@@ -69,9 +71,7 @@ export default function Collect() {
             <p className="text-ellipsis overflow-hidden">
               Peso: {report.weight}
             </p>
-            <p className="text-ellipsis overflow-hidden">
-              M3: {report.m3}
-            </p>
+            <p className="text-ellipsis overflow-hidden">M3: {report.m3}</p>
           </div>
           <p>Caixas: {report.boxes}</p>
         </div>
@@ -98,13 +98,25 @@ export default function Collect() {
     <div className="flex justify-center gap-2 mt-4 font-poppins">
       <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4">
         <div className="w-[370px] md:w-full">
-          <h1 className="text-center text-neutral-500 text-2xl">
-            Coleta: {window.location.pathname.split('/')[2]}
-          </h1>
+          <div className="w-full flex justify-center relative mb-6 items-center">
+            <div className="left-0 absolute">
+              <Button
+                onClick={goBack}
+                className="bg-tangaroa-400 hover:bg-tangaroa-300 h-10 w-14"
+              >
+                <ChevronLeftIcon />
+              </Button>
+            </div>
+            <div className="flex justify-center">
+              <h1 className="text-2xl text-neutral-500">
+                Coleta: {window.location.pathname.split('/')[2]}
+              </h1>
+            </div>
+          </div>
           <Toggle>
             <form className="flex flex-col gap-2" onSubmit={filter}>
-              <div className="flex flex-wrap items-end">
-                <div className=" w-full md:w-2/4">
+              <div className="flex flex-wrap items-end gap-4">
+                <div className=" w-full md:w-2/5">
                   <label htmlFor="input-charge" className="text-white gap-1">
                     Carga
                   </label>
@@ -114,8 +126,7 @@ export default function Collect() {
                     className="bg-white"
                   />
                 </div>
-                <div className=" w-full md:w-2/4"></div>
-                <div className="flex mt-4 justify-end w-full md:w-24">
+                <div className="flex mt-4 w-full md:w-1/6 ml-auto">
                   <Button className="w-full h-10 bg-tangaroa-400 hover:bg-tangaroa-300">
                     Filtrar
                   </Button>

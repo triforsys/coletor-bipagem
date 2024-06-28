@@ -64,7 +64,7 @@ export default function Report() {
   };
 
   const handleFinish = () => {
-    goToHomepage();
+    if (confirm('Deseja realmente FINALIZAR?')) goToHomepage();
   };
   const handleExit = () => {
     const reallyExit = confirm('Deseja realmente sair?');
@@ -74,17 +74,7 @@ export default function Report() {
     }
   };
 
-  const handleBarcode = (obj) => {
-    // const barcode = barcodeRef.current.value;
-    // console.log(barcode);
-
-    if (obj.error) {
-      alert('Código inválido!');
-      return true;
-    }
-    barcodeRef.current.value = obj.code;
-    return false;
-  };
+  const handleBarcode = () => {};
 
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
