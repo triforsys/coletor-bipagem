@@ -52,7 +52,17 @@ export default function Report() {
 
   const handleReleaseReading = () => {};
 
-  const handleStop = () => {};
+  const handleStop = () => {
+    const stopMotivate = prompt(
+      'Informe o motivo da parada (30 caracteres)',
+    ).slice(0, 30);
+
+    if (stopMotivate.length < 10)
+      prompt('Motivo precisa ter pelo menos 10 caracteres');
+
+    if (confirm('Deseja realmente parar?')) goBack();
+  };
+
   const handleFinish = () => {
     goToHomepage();
   };
