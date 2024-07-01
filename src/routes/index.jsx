@@ -28,7 +28,7 @@ export default function Rotas() {
           }
         />
         <Route
-          path="/transporte/:id"
+          path="/transporte"
           element={
             <PrivateRoute>
               <Transport />

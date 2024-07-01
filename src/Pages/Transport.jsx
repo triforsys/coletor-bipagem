@@ -1,104 +1,95 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { BoxIcon, ChevronLeftIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react'
+import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useNavigate } from 'react-router-dom'
 
-const list = [
-  {
-    code: 12341234132,
-    error: false,
-  },
-  {
-    code: 56789012345,
-    error: false,
-  },
-];
+const CardReport = () => {
+  const urlKeys = ['id', 'campanha', 'regiao', 'peso', 'm3', 'caixas']
+  const url = new URLSearchParams(document.location.href)
+  const params = {}
+  const getParam = (key) => {
+    params[key] = url.get(key)
+  }
+  urlKeys.map(getParam)
 
-const CardReport = ({ children: report }) => {
   return (
     <div className="flex rounded-2xl card-shadow min-w-[370px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2">
       <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
         <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
-        {/* <Button
-          className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
-          // onClick={() => redirectToTransportPage(report.charge)}
-        >
-          Iniciar
-        </Button> */}
       </div>
       <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-        <p className="font-bold">Transporte: {report.charge}</p>
+        <p className="font-bold">Transporte: {params.id}</p>
         <p className="text-ellipsis overflow-hidden">
-          Campanha: {report.campaign}
+          Campanha: {params.campanha}
         </p>
-        <p className="text-ellipsis overflow-hidden">Região: {report.region}</p>
+        <p className="text-ellipsis overflow-hidden">Região: {params.regiao}</p>
         <div className="flex gap-3">
-          <p className="text-ellipsis overflow-hidden">Peso: {report.weight}</p>
-          <p className="text-ellipsis overflow-hidden">M3: {report.m3}</p>
+          <p className="text-ellipsis overflow-hidden">Peso: {params.peso}</p>
+          <p className="text-ellipsis overflow-hidden">M3: {params.m3}</p>
         </div>
-        <p>Caixas: {report.boxes}</p>
+        <p>Caixas: {params.caixas}</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default function Report() {
-  const navigate = useNavigate();
-  const barcodeRef = useRef();
-  const releaseReadingRef = useRef();
-  const [isReadingBlocked, setIsReadingBlocked] = useState();
+  const navigate = useNavigate()
+  const barcodeRef = useRef()
+  const releaseReadingRef = useRef()
+  const [isReadingBlocked, setIsReadingBlocked] = useState()
 
-  const goBack = () => navigate(-1);
-  const goToHomepage = () => navigate('/coletas');
+  const goBack = () => navigate(-1)
+  const goToHomepage = () => navigate('/coletas')
 
   const toggleReleaseReadingDisabled = () =>
-    (releaseReadingRef.current.disabled = !releaseReadingRef.current.disabled);
+    (releaseReadingRef.current.disabled = !releaseReadingRef.current.disabled)
 
   const handleReleaseReading = () => {
     if (confirm('Deseja liberar a leitura?')) {
-      barcodeRef.current.disabled = false;
-      toggleReleaseReadingDisabled();
+      barcodeRef.current.disabled = false
+      toggleReleaseReadingDisabled()
     }
-  };
+  }
 
   const handleStop = () => {
     const stopMotivate = prompt(
       'Informe o motivo da parada (30 caracteres)',
-    ).slice(0, 30);
+    ).slice(0, 30)
 
     if (stopMotivate.length < 10)
-      prompt('Motivo precisa ter pelo menos 10 caracteres');
+      prompt('Motivo precisa ter pelo menos 10 caracteres')
 
-    if (confirm('Deseja realmente parar?')) goBack();
-  };
+    if (confirm('Deseja realmente parar?')) goBack()
+  }
 
   const handleFinish = () => {
-    if (confirm('Deseja realmente FINALIZAR?')) goToHomepage();
-  };
+    if (confirm('Deseja realmente FINALIZAR?')) goToHomepage()
+  }
   const handleExit = () => {
-    const reallyExit = confirm('Deseja realmente sair?');
+    const reallyExit = confirm('Deseja realmente sair?')
 
     if (reallyExit) {
-      goToHomepage();
+      goToHomepage()
     }
-  };
+  }
 
   const handleBarcode = () => {
-    const barcodeInput = barcodeRef.current;
-    if (!barcodeInput.value || barcodeInput.disabled) return;
-    barcodeInput.disabled = true;
+    const barcodeInput = barcodeRef.current
+    if (!barcodeInput.value || barcodeInput.disabled) return
+    barcodeInput.disabled = true
 
     setTimeout(() => {
-      alert('Erro: leitura bloqueada');
-      toggleReleaseReadingDisabled();
-      return;
-    }, [3000]);
+      alert('Erro: leitura bloqueada')
+      toggleReleaseReadingDisabled()
+      return
+    }, [3000])
     // barcodeInput.disabled = false;
-  };
+  }
 
   useEffect(() => {
-   releaseReadingRef.current.disabled = true;
+    releaseReadingRef.current.disabled = true
   }, [])
 
   return (
@@ -166,5 +157,5 @@ export default function Report() {
         </div>
       </div>
     </div>
-  );
+  )
 }

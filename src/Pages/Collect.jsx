@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { userDecode } from '../lib/jwtDecode';
-import { BoxIcon, ChevronLeftIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import Toggle from '@/components/utils/Toggle';
-import { Input } from '@/components/ui/input';
+import React, { useEffect, useRef, useState } from 'react'
+import { userDecode } from '../lib/jwtDecode'
+import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
+import Toggle from '@/components/utils/Toggle'
+import { Input } from '@/components/ui/input'
 
 const reportList = [
   {
@@ -30,22 +30,24 @@ const reportList = [
   //   transporter: 'TAFF',
   //   boxes: 1234,
   // },
-];
+]
 
 export default function Collect() {
   // const [user, setUser] = useState(userDecode());
 
-  const navigate = useNavigate();
-  const [filteredList, setFilteredList] = useState([]);
+  const navigate = useNavigate()
+  const [filteredList, setFilteredList] = useState([])
 
-  const goBack = () => navigate(-1);
+  const goBack = () => navigate(-1)
 
   useEffect(() => {
-    setFilteredList(reportList);
-  }, []);
+    setFilteredList(reportList)
+  }, [])
 
-  const redirectToTransportPage = (transport) =>
-    navigate(`/transporte/${transport}`);
+  const redirectToTransportPage = (report) =>
+    navigate(
+      `/transporte/?tranporte&id=${report.charge}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
+    )
 
   const CardReport = ({ children: report }) => {
     return (
@@ -54,7 +56,7 @@ export default function Collect() {
           <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
           <Button
             className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
-            onClick={() => redirectToTransportPage(report.charge)}
+            onClick={() => redirectToTransportPage(report)}
           >
             Iniciar
           </Button>
@@ -76,23 +78,23 @@ export default function Collect() {
           <p>Caixas: {report.boxes}</p>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
-  const chargeRef = useRef();
+  const chargeRef = useRef()
 
   const filter = (e) => {
-    e.preventDefault();
-    const chargeValue = chargeRef.current.value;
+    e.preventDefault()
+    const chargeValue = chargeRef.current.value
 
-    if (chargeValue.length < 5) setFilteredList(reportList);
+    if (chargeValue.length < 5) setFilteredList(reportList)
     else
       setFilteredList(
         reportList.filter((item) =>
           String(item.charge).startsWith(chargeValue),
         ),
-      );
-  };
+      )
+  }
 
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
@@ -140,5 +142,5 @@ export default function Collect() {
         ))}
       </div>
     </div>
-  );
+  )
 }
