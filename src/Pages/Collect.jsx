@@ -118,7 +118,7 @@ export default function Collect() {
               <div className="flex flex-wrap items-end gap-4">
                 <div className=" w-full md:w-2/5">
                   <label htmlFor="input-charge" className="text-white gap-1">
-                    Carga
+                    Transporte
                   </label>
                   <Input
                     id="input-charge"

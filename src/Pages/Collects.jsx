@@ -12,6 +12,7 @@ export default function Collects() {
   const reportList = [
     {
       collect: 1234,
+      calendar: '2024-06-12 06:00',
       transporter: 'TAFF',
       vehicle: 'Carreta',
       plate: 'ABC-1234',
@@ -23,6 +24,7 @@ export default function Collects() {
     },
     {
       collect: 198173,
+      calendar: '2024-06-13 06:00',
       transporter: 'TAFF',
       vehicle: 'CARRETA',
       plate: '',
@@ -34,6 +36,7 @@ export default function Collects() {
     },
     {
       collect: 198174,
+      calendar: '2024-06-14 06:00',
       transporter: 'TAFF',
       vehicle: 'TRUCK',
       plate: '',
@@ -61,7 +64,7 @@ export default function Collects() {
     const buttonType = getButtonType(report);
 
     return (
-      <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[171px] gap-2">
+      <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[250px] gap-2">
         <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
           <TruckIcon className="w-[78px] h-[75px] text-tangaroa-100" />
           {buttonType === 'released' ? (
@@ -72,18 +75,26 @@ export default function Collects() {
               Iniciar
             </Button>
           ) : (
-            <Button className="rounded-[10px] w-20 h-6 text-xs disabled:bg-tangaroa-100 disabled:text-tangaroa-950" disabled>
+            <Button
+              className="rounded-[10px] w-20 h-6 text-xs disabled:bg-tangaroa-100 disabled:text-tangaroa-950"
+              disabled
+            >
               Em progresso
             </Button>
           )}
         </div>
         <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
           <p className="font-bold">Coleta: {report.collect}</p>
+          <p>Agenda: {new Date(report.calendar).toLocaleString({})}</p>
           <p>Transportadora: {report.transporter}</p>
           <p>Tipo Veículo: {report.vehicle}</p>
           <p>Placa Veículo: {report.plate}</p>
           <p>Motorista: {report.driverName}</p>
           <p>Doca: {report.dock}</p>
+          <div className="flex gap-2">
+            <Button disabled className="size-24 h-10 bg-tangaroa-500">Remessa</Button>
+            <Button disabled className="size-24 h-10 bg-tangaroa-500">Blocado</Button>
+          </div>
         </div>
       </div>
     );

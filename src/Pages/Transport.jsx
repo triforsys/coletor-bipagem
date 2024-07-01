@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BoxIcon, ChevronLeftIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,11 +46,21 @@ const CardReport = ({ children: report }) => {
 export default function Report() {
   const navigate = useNavigate();
   const barcodeRef = useRef();
+  const releaseReadingRef = useRef();
+  const [isReadingBlocked, setIsReadingBlocked] = useState();
 
   const goBack = () => navigate(-1);
   const goToHomepage = () => navigate('/coletas');
 
-  const handleReleaseReading = () => {};
+  const toggleReleaseReadingDisabled = () =>
+    (releaseReadingRef.current.disabled = !releaseReadingRef.current.disabled);
+
+  const handleReleaseReading = () => {
+    if (confirm('Deseja liberar a leitura?')) {
+      barcodeRef.current.disabled = false;
+      toggleReleaseReadingDisabled();
+    }
+  };
 
   const handleStop = () => {
     const stopMotivate = prompt(
@@ -74,7 +84,22 @@ export default function Report() {
     }
   };
 
-  const handleBarcode = () => {};
+  const handleBarcode = () => {
+    const barcodeInput = barcodeRef.current;
+    if (!barcodeInput.value || barcodeInput.disabled) return;
+    barcodeInput.disabled = true;
+
+    setTimeout(() => {
+      alert('Erro: leitura bloqueada');
+      toggleReleaseReadingDisabled();
+      return;
+    }, [3000]);
+    // barcodeInput.disabled = false;
+  };
+
+  useEffect(() => {
+   releaseReadingRef.current.disabled = true;
+  }, [])
 
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
@@ -118,6 +143,7 @@ export default function Report() {
             <Button
               className="w-full rounded-md bg-tangaroa-400 hover:bg-tangaroa-300"
               onClick={handleReleaseReading}
+              ref={releaseReadingRef}
             >
               LIBERAR LEITURA
             </Button>

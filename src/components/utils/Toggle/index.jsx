@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ChevronDownIcon, ChevronLeftIcon, Filter, X } from 'lucide-react';
+import { Filter, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 export default function Toggle({ children }) {
