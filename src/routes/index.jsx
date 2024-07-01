@@ -11,17 +11,30 @@ export default function Rotas() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/coletas" element={<Collects />} />
-        <Route path="/coleta/:id" element={<Collect />}  />
-        <Route path="/transporte/:id" element={<Transport />} />
-        {/* <Route
-          path="/home"
+        <Route
+          path="/coletas"
           element={
             <PrivateRoute>
-              <Home />
+              <Collects />
             </PrivateRoute>
           }
-        /> */}
+        />
+        <Route
+          path="/coleta/:id"
+          element={
+            <PrivateRoute>
+              <Collect />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/transporte/:id"
+          element={
+            <PrivateRoute>
+              <Transport />
+            </PrivateRoute>
+          }
+        />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
