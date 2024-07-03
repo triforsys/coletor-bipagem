@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { userDecode } from '../lib/jwtDecode'
 import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +7,7 @@ import { Input } from '@/components/ui/input'
 
 const reportList = [
   {
-    charge: 198174,
+    transport: 198174,
     campaign: 'LINHA',
     region: 'BA',
     boxes: 2024,
@@ -16,25 +15,16 @@ const reportList = [
     m3: 14.41,
   },
   {
-    charge: 198179,
+    transport: 198179,
     campaign: 'M&N_BISC_BYTES_MONT_SJ',
     region: 'BA',
     boxes: 980,
     weight: 13061.02,
     m3: 14.41,
   },
-  // {
-  //   charge: 175584,
-  //   campaign: 'COMERCIAL FERNANDES STL LTDA',
-  //   region: 'AL_MA_PB_PE_RN_SE',
-  //   transporter: 'TAFF',
-  //   boxes: 1234,
-  // },
 ]
 
 export default function Collect() {
-  // const [user, setUser] = useState(userDecode());
-
   const navigate = useNavigate()
   const [filteredList, setFilteredList] = useState([])
 
@@ -46,7 +36,7 @@ export default function Collect() {
 
   const redirectToTransportPage = (report) =>
     navigate(
-      `/transporte/?tranporte&id=${report.charge}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
+      `/transporte/?tranporte&id=${report.transport}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
     )
 
   const CardReport = ({ children: report }) => {
@@ -62,7 +52,7 @@ export default function Collect() {
           </Button>
         </div>
         <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">Transporte: {report.charge}</p>
+          <p className="font-bold">Transporte: {report.transport}</p>
           <p className="text-ellipsis overflow-hidden">
             Campanha: {report.campaign}
           </p>
@@ -81,17 +71,17 @@ export default function Collect() {
     )
   }
 
-  const chargeRef = useRef()
+  const transportRef = useRef()
 
   const filter = (e) => {
     e.preventDefault()
-    const chargeValue = chargeRef.current.value
+    const transportValue = transportRef.current.value
 
-    if (chargeValue.length < 5) setFilteredList(reportList)
+    if (transportValue.length < 5) setFilteredList(reportList)
     else
       setFilteredList(
         reportList.filter((item) =>
-          String(item.charge).startsWith(chargeValue),
+          String(item.transport).startsWith(transportValue),
         ),
       )
   }
@@ -124,7 +114,7 @@ export default function Collect() {
                   </label>
                   <Input
                     id="input-charge"
-                    ref={chargeRef}
+                    ref={transportRef}
                     className="bg-white"
                   />
                 </div>
@@ -138,7 +128,7 @@ export default function Collect() {
           </Toggle>
         </div>
         {filteredList.map((report) => (
-          <CardReport key={report.charge}>{report}</CardReport>
+          <CardReport key={report.transport}>{report}</CardReport>
         ))}
       </div>
     </div>

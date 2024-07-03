@@ -23,7 +23,7 @@ const CardReport = () => {
         <p className="text-ellipsis overflow-hidden">
           Campanha: {params.campanha}
         </p>
-        <p className="text-ellipsis overflow-hidden">Região: {params.regiao}</p>
+        <p className="text-ellipsis overflow-hidden">Região: { params.regiao}</p>
         <div className="flex gap-3">
           <p className="text-ellipsis overflow-hidden">Peso: {params.peso}</p>
           <p className="text-ellipsis overflow-hidden">M3: {params.m3}</p>
