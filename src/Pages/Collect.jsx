@@ -4,35 +4,28 @@ import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import Toggle from '@/components/utils/Toggle'
 import { Input } from '@/components/ui/input'
-
-const reportList = [
-  {
-    transport: 198174,
-    campaign: 'LINHA',
-    region: 'BA',
-    boxes: 2024,
-    weight: 13061.02,
-    m3: 14.41,
-  },
-  {
-    transport: 198179,
-    campaign: 'M&N_BISC_BYTES_MONT_SJ',
-    region: 'BA',
-    boxes: 980,
-    weight: 13061.02,
-    m3: 14.41,
-  },
-]
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 
 export default function Collect() {
   const navigate = useNavigate()
-  const [filteredList, setFilteredList] = useState([])
-
   const goBack = () => navigate(-1)
 
-  useEffect(() => {
-    setFilteredList(reportList)
-  }, [])
+  const collectId = window.location.pathname.split('/')[2]
+
+  const { data } = useQuery({
+    queryKey: ['list'],
+    queryFn: async () => {
+      const query = await api
+        .get(`/bipagem/transportes/${collectId}`)
+        .then((response) => response.data)
+      setList(query)
+      return query
+    },
+    initialData: [],
+  })
+
+  const [list, setList] = useState(data)
 
   const redirectToTransportPage = (report) =>
     navigate(
@@ -52,20 +45,18 @@ export default function Collect() {
           </Button>
         </div>
         <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">Transporte: {report.transport}</p>
+          <p className="font-bold">Transporte: {report.Transporte}</p>
           <p className="text-ellipsis overflow-hidden">
-            Campanha: {report.campaign}
+            Campanha: {report.Campanha}
           </p>
           <p className="text-ellipsis overflow-hidden">
-            Região: {report.region}
+            Região: {report.Regiao}
           </p>
           <div className="flex gap-3">
-            <p className="text-ellipsis overflow-hidden">
-              Peso: {report.weight}
-            </p>
-            <p className="text-ellipsis overflow-hidden">M3: {report.m3}</p>
+            <p className="text-ellipsis overflow-hidden">Peso: {report.Peso}</p>
+            <p className="text-ellipsis overflow-hidden">M3: {report.M3}</p>
           </div>
-          <p>Caixas: {report.boxes}</p>
+          <p>Caixas: {report.TotalCaixas}</p>
         </div>
       </div>
     )
@@ -77,11 +68,11 @@ export default function Collect() {
     e.preventDefault()
     const transportValue = transportRef.current.value
 
-    if (transportValue.length < 5) setFilteredList(reportList)
+    if (transportValue.length < 5) setList(data)
     else
-      setFilteredList(
-        reportList.filter((item) =>
-          String(item.transport).startsWith(transportValue),
+      setList(
+        data.filter((item) =>
+          String(item.Transporte).startsWith(transportValue),
         ),
       )
   }
@@ -100,9 +91,7 @@ export default function Collect() {
               </Button>
             </div>
             <div className="flex justify-center">
-              <h1 className="text-2xl text-neutral-500">
-                Coleta: {window.location.pathname.split('/')[2]}
-              </h1>
+              <h1 className="text-2xl text-neutral-500">Coleta: {collectId}</h1>
             </div>
           </div>
           <Toggle>
@@ -127,8 +116,8 @@ export default function Collect() {
             </form>
           </Toggle>
         </div>
-        {filteredList.map((report) => (
-          <CardReport key={report.transport}>{report}</CardReport>
+        {list.map((report) => (
+          <CardReport key={report.Transporte}>{report}</CardReport>
         ))}
       </div>
     </div>
