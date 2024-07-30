@@ -1,88 +1,32 @@
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import { TruckIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { api } from '@/lib/api'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useQuery } from '@tanstack/react-query'
+import Toggle from '@/components/utils/Toggle'
+import { Input } from '@/components/ui/input'
 
 export default function Collects() {
   const navigate = useNavigate()
-  const [reportList, setReportList] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const coletaRef = useRef()
+  // const [isLoading, setIsLoading] = useState(false)
 
-  const getCollectList = async () => {
-    setIsLoading(true)
-    const response = await api.post('bipagem/coletas', {})
-    const collectList = response.data
-    setIsLoading(false)
-    setReportList(collectList)
-  }
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['list'],
+    queryFn: async () => {
+      const query = await api
+        .post('/bipagem/coletas', { coleta: coletaRef.current.value })
+        .then((response) => response.data)
+      return query
+    },
+    initialData: [],
+  })
 
-  useEffect(() => {
-    getCollectList()
-  }, [])
-
-  // const reportList = [
-  //   {
-  //     collect: 1234,
-  //     calendar: '2024-06-12 06:00',
-  //     transporter: 'TAFF',
-  //     vehicle: 'Carreta',
-  //     plate: 'ABC-1234',
-  //     dock: '24',
-  //     driverName: 'Rafael Silva',
-  //     statusColeta: 'acionada',
-  //     invoiced: 0,
-  //     readVolumes: 1,
-  //   },
-  //   {
-  //     collect: 198173,
-  //     calendar: '2024-06-13 06:00',
-  //     transporter: 'TAFF',
-  //     vehicle: 'CARRETA',
-  //     plate: '',
-  //     dock: '25',
-  //     driverName: '',
-  //     statusColeta: '',
-  //     invoiced: 0,
-  //     readVolumes: 1,
-  //     transportList: [],
-  //   },
-  //   {
-  //     collect: 198174,
-  //     calendar: '2024-06-14 06:00',
-  //     transporter: 'TAFF',
-  //     vehicle: 'TRUCK',
-  //     plate: '',
-  //     dock: '26',
-  //     driverName: '',
-  //     statusColeta: '',
-  //     invoiced: 1,
-  //     readVolumes: 0,
-  //     transportList: [
-  //       {
-  //         transport: 198174,
-  //         campaign: 'LINHA',
-  //         region: 'BA',
-  //         boxes: 2024,
-  //         weight: 13061.02,
-  //         m3: 14.41,
-  //       },
-  //       {
-  //         transport: 198179,
-  //         campaign: 'M&N_BISC_BYTES_MONT_SJ',
-  //         region: 'BA',
-  //         boxes: 980,
-  //         weight: 13061.02,
-  //         m3: 14.41,
-  //       },
-  //     ],
-  //   },
-  // ]
-
-  const reportListFiltered = reportList.filter(
-    (report) => report.statusColeta !== 'acionada',
-  )
+  // const reportListFiltered = data.filter(
+  //   (report) => report.statusColeta !== 'acionada',
+  // )
 
   const redirectToCollectPage = (collect) => navigate(`/coleta/${collect}`)
   const redirectToTransportPage = (report) =>
@@ -137,7 +81,7 @@ export default function Collects() {
               Remessa
             </Button>
             <Button
-              // disabled={report.transportList.length}
+              disabled
               onClick={() => redirectToTransportPage(report)}
               className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
             >
@@ -188,12 +132,40 @@ export default function Collects() {
     )
   }
 
+  const handleFilter = (e) => {
+    e.preventDefault()
+    refetch()
+  }
+
   return (
-    <div className="flex justify-cen ter gap-2 mt-4 font-poppins">
-      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4">
+    <div className="flex justify-center gap-2 mt-4 font-poppins">
+      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
+        <div className="w-[370px] md:w-full">
+          <Toggle>
+            <form className="flex flex-col gap-2" onSubmit={handleFilter}>
+              <div className="flex flex-wrap items-end gap-4">
+                <div className="w-full md:w-2/5">
+                  <label htmlFor="input-charge" className="text-white gap-1">
+                    Coleta
+                  </label>
+                  <Input
+                    id="input-charge"
+                    ref={coletaRef}
+                    className="bg-white"
+                  />
+                </div>
+                <div className="flex mt-4 w-full md:w-1/6 ml-auto">
+                  <Button className="w-full h-10 bg-tangaroa-400 hover:bg-tangaroa-300">
+                    Filtrar
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </Toggle>
+        </div>
         {isLoading
           ? [0, 1].map((item) => <CardSkeleton key={item} />)
-          : reportList.map((report, index) => (
+          : data.map((report, index) => (
               <CardReport key={report.Coleta + index}>{report}</CardReport>
             ))}
       </div>

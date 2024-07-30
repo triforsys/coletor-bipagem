@@ -25,7 +25,7 @@ export default function Collect() {
     initialData: [],
   })
 
-  const [list, setList] = useState(data)
+  const [list, setList] = useState([])
 
   const redirectToTransportPage = (report) =>
     navigate(
@@ -79,7 +79,7 @@ export default function Collect() {
 
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
-      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4">
+      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
         <div className="w-[370px] md:w-full">
           <div className="w-full flex justify-center relative mb-6 items-center">
             <div className="left-0 absolute">
