@@ -13,7 +13,7 @@ export default function Collect() {
 
   const collectId = window.location.pathname.split('/')[2]
 
-  const { data } = useQuery({
+  const { data, isLoading, isFetched } = useQuery({
     queryKey: ['list'],
     queryFn: async () => {
       const query = await api
@@ -29,7 +29,7 @@ export default function Collect() {
 
   const redirectToTransportPage = (report) =>
     navigate(
-      `/transporte/?tranporte&id=${report.transport}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
+      `/transporte/?tranporte&id=${report.Transporte}&campanha=${String(report.Campanha).replaceAll('&', '%26')}&regiao=${report.Regiao}&peso=${report.Peso}&m3=${report.M3}&caixas=${report.TotalCaixas}`,
     )
 
   const CardReport = ({ children: report }) => {
@@ -102,6 +102,7 @@ export default function Collect() {
                     Transporte
                   </label>
                   <Input
+                    minLength={5}
                     id="input-charge"
                     ref={transportRef}
                     className="bg-white"
@@ -116,9 +117,14 @@ export default function Collect() {
             </form>
           </Toggle>
         </div>
-        {list.map((report) => (
-          <CardReport key={report.Transporte}>{report}</CardReport>
-        ))}
+
+        {isFetched && !list.length ? (
+          <div className='flex justify-center mt-4 text-2xl w-full'>Nenhum resultado encontrado</div>
+        ) : (
+          list.map((report) => (
+            <CardReport key={report.Transporte}>{report}</CardReport>
+          ))
+        )}
       </div>
     </div>
   )

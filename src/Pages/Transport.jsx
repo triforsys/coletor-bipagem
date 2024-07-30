@@ -3,42 +3,55 @@ import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 
-const CardReport = () => {
-  const urlKeys = ['id', 'campanha', 'regiao', 'peso', 'm3', 'caixas']
-  const url = new URLSearchParams(document.location.href)
-  const params = {}
-  const getParam = (key) => {
-    params[key] = url.get(key)
-  }
-  urlKeys.map(getParam)
-
+const CardReport = (data) => {
+    // const url = new URLSearchParams(document.location.href)
+    // const params = {}
+    // const getParam = (key) => {
+    //   params[key] = url.get(key)
+    // }
+    
+    // const urlKeys = ['id', 'campanha', 'regiao', 'peso', 'm3', 'caixas']
+    // urlKeys.map(getParam) 
+  
   return (
     <div className="flex rounded-2xl card-shadow min-w-[370px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2">
       <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
         <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
       </div>
       <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-        <p className="font-bold">Transporte: {params.id}</p>
+        <p className="font-bold">Transporte: {data.id}</p>
         <p className="text-ellipsis overflow-hidden">
-          Campanha: {params.campanha}
+          Campanha: {data.campanha}
         </p>
-        <p className="text-ellipsis overflow-hidden">Região: { params.regiao}</p>
+        <p className="text-ellipsis overflow-hidden">Região: { data.regiao}</p>
         <div className="flex gap-3">
-          <p className="text-ellipsis overflow-hidden">Peso: {params.peso}</p>
-          <p className="text-ellipsis overflow-hidden">M3: {params.m3}</p>
+          <p className="text-ellipsis overflow-hidden">Peso: {data.peso}</p>
+          <p className="text-ellipsis overflow-hidden">M3: {data.m3}</p>
         </div>
-        <p>Caixas: {params.caixas}</p>
+        <p>Caixas: {data.caixas}</p>
       </div>
     </div>
   )
 }
 
 export default function Report() {
+  const url = new URLSearchParams(document.location.href)
+  const params = {}
+  const getParam = (key) => {
+    params[key] = url.get(key)
+  }
+  
+  const urlKeys = ['id', 'campanha', 'regiao', 'peso', 'm3', 'caixas']
+  urlKeys.map(getParam)
+
   const navigate = useNavigate()
   const barcodeRef = useRef()
   const releaseReadingRef = useRef()
   const [isReadingBlocked, setIsReadingBlocked] = useState()
+  const [quantityBip, setQuantityBip] = useState(0)
 
   const goBack = () => navigate(-1)
   const goToHomepage = () => navigate('/coletas')
@@ -75,16 +88,34 @@ export default function Report() {
     }
   }
 
+  const barcodeMutation = useMutation({
+    mutationFn: async () => {
+      const barcodeInput = barcodeRef.current
+      if (!barcodeInput.value || barcodeInput.disabled) return
+      
+      barcodeInput.disabled = true
+
+      // await api.post('/bipagem/codigoDeBarras', {
+      //   idNota: '',
+      //   transporte: params.id,
+      //   codigoDeBarras: barcodeInput.value
+      // })
+      return {msg: 'erro'}
+    },
+    mutationKey: ['barcode']
+  })
+
   const handleBarcode = () => {
     const barcodeInput = barcodeRef.current
     if (!barcodeInput.value || barcodeInput.disabled) return
     barcodeInput.disabled = true
 
-    setTimeout(() => {
-      alert('Erro: leitura bloqueada')
-      toggleReleaseReadingDisabled()
-      return
-    }, [3000])
+    // setTimeout(() => {
+    //   alert('Erro: leitura bloqueada')
+    //   toggleReleaseReadingDisabled()
+    //   return
+    // }, [3000])
+
     // barcodeInput.disabled = false;
   }
 
@@ -111,17 +142,18 @@ export default function Report() {
           </div>
         </div>
         <CardReport
-          children={{
-            charge: 198179,
-            campaign: 'M&N_BISC_BYTES_MONT_SJ',
-            region: 'BA',
-            boxes: 980,
-            weight: 13061.02,
-            m3: 14.41,
-          }}
+          // children={{
+            data={params}
+            // charge: 198179,
+            // campaign: 'M&N_BISC_BYTES_MONT_SJ',
+            // region: 'BA',
+            // boxes: 980,
+            // weight: 13061.02,
+            // m3: 14.41,
+          // }}
         />
         <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
-          {1234123}
+          {quantityBip}
         </div>
         <Input
           ref={barcodeRef}

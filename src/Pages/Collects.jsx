@@ -134,6 +134,8 @@ export default function Collects() {
 
   const handleFilter = (e) => {
     e.preventDefault()
+    const coleta = coletaRef.current.value
+    if(coleta.length === 0 || coleta.length >= 5)
     refetch()
   }
 
@@ -151,6 +153,7 @@ export default function Collects() {
                   <Input
                     id="input-charge"
                     ref={coletaRef}
+                    minLength={5}
                     className="bg-white"
                   />
                 </div>
