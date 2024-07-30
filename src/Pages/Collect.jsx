@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +13,7 @@ export default function Collect() {
 
   const collectId = window.location.pathname.split('/')[2]
 
-  const { data, isLoading, isFetched } = useQuery({
+  const { data, isFetched } = useQuery({
     queryKey: ['list'],
     queryFn: async () => {
       const query = await api
@@ -119,7 +119,9 @@ export default function Collect() {
         </div>
 
         {isFetched && !list.length ? (
-          <div className='flex justify-center mt-4 text-2xl w-full'>Nenhum resultado encontrado</div>
+          <div className="flex justify-center mt-4 text-2xl w-full">
+            Nenhum resultado encontrado
+          </div>
         ) : (
           list.map((report) => (
             <CardReport key={report.Transporte}>{report}</CardReport>

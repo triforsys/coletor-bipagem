@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { TruckIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -10,10 +10,10 @@ import { Input } from '@/components/ui/input'
 
 export default function Collects() {
   const navigate = useNavigate()
-  const coletaRef = useRef()
-  // const [isLoading, setIsLoading] = useState(false)
 
-  const { data, isLoading, refetch } = useQuery({
+  const coletaRef = useRef()
+
+  const { data, isLoading, isFetched, refetch } = useQuery({
     queryKey: ['list'],
     queryFn: async () => {
       const query = await api
@@ -135,8 +135,7 @@ export default function Collects() {
   const handleFilter = (e) => {
     e.preventDefault()
     const coleta = coletaRef.current.value
-    if(coleta.length === 0 || coleta.length >= 5)
-    refetch()
+    if (coleta.length === 0 || coleta.length >= 5) refetch()
   }
 
   return (
@@ -166,11 +165,17 @@ export default function Collects() {
             </form>
           </Toggle>
         </div>
-        {isLoading
-          ? [0, 1].map((item) => <CardSkeleton key={item} />)
-          : data.map((report, index) => (
-              <CardReport key={report.Coleta + index}>{report}</CardReport>
-            ))}
+        {isLoading ? (
+          [0, 1].map((item) => <CardSkeleton key={item} />)
+        ) : isFetched && !data.length ? (
+          <div className="flex justify-center mt-4 text-2xl w-full">
+            Nenhum resultado encontrado
+          </div>
+        ) : (
+          data.map((report, index) => (
+            <CardReport key={report.Coleta + index}>{report}</CardReport>
+          ))
+        )}
       </div>
     </div>
   )

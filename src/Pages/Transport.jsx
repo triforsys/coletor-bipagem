@@ -1,41 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
 
-const CardReport = (data) => {
-    // const url = new URLSearchParams(document.location.href)
-    // const params = {}
-    // const getParam = (key) => {
-    //   params[key] = url.get(key)
-    // }
-    
-    // const urlKeys = ['id', 'campanha', 'regiao', 'peso', 'm3', 'caixas']
-    // urlKeys.map(getParam) 
-  
-  return (
-    <div className="flex rounded-2xl card-shadow min-w-[370px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2">
-      <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
-        <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
-      </div>
-      <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-        <p className="font-bold">Transporte: {data.id}</p>
-        <p className="text-ellipsis overflow-hidden">
-          Campanha: {data.campanha}
-        </p>
-        <p className="text-ellipsis overflow-hidden">Região: { data.regiao}</p>
-        <div className="flex gap-3">
-          <p className="text-ellipsis overflow-hidden">Peso: {data.peso}</p>
-          <p className="text-ellipsis overflow-hidden">M3: {data.m3}</p>
-        </div>
-        <p>Caixas: {data.caixas}</p>
-      </div>
+import { api } from '@/lib/api'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import BipError from '../assets/notifications/erroBip.mp3'
+import BipSuccess from '../assets/notifications/Papa-Leguas.mp3'
+
+const CardReport = ({ data }) => (
+  <div className="flex rounded-2xl card-shadow min-w-[370px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2">
+    <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
+      <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
     </div>
-  )
-}
+    <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
+      <p className="font-bold">Transporte: {data.id}</p>
+      <p className="text-ellipsis overflow-hidden">Campanha: {data.campanha}</p>
+      <p className="text-ellipsis overflow-hidden">Região: {data.regiao}</p>
+      <div className="flex gap-3">
+        <p className="text-ellipsis overflow-hidden">Peso: {data.peso}</p>
+        <p className="text-ellipsis overflow-hidden">M3: {data.m3}</p>
+      </div>
+      <p>Caixas: {data.caixas}</p>
+    </div>
+  </div>
+)
 
 export default function Report() {
   const url = new URLSearchParams(document.location.href)
@@ -43,26 +34,24 @@ export default function Report() {
   const getParam = (key) => {
     params[key] = url.get(key)
   }
-  
+
   const urlKeys = ['id', 'campanha', 'regiao', 'peso', 'm3', 'caixas']
   urlKeys.map(getParam)
 
   const navigate = useNavigate()
+
   const barcodeRef = useRef()
   const releaseReadingRef = useRef()
-  const [isReadingBlocked, setIsReadingBlocked] = useState()
+
   const [quantityBip, setQuantityBip] = useState(0)
 
   const goBack = () => navigate(-1)
   const goToHomepage = () => navigate('/coletas')
 
-  const toggleReleaseReadingDisabled = () =>
-    (releaseReadingRef.current.disabled = !releaseReadingRef.current.disabled)
-
   const handleReleaseReading = () => {
     if (confirm('Deseja liberar a leitura?')) {
       barcodeRef.current.disabled = false
-      toggleReleaseReadingDisabled()
+      releaseReadingRef.current.disabled = true
     }
   }
 
@@ -80,6 +69,7 @@ export default function Report() {
   const handleFinish = () => {
     if (confirm('Deseja realmente FINALIZAR?')) goToHomepage()
   }
+
   const handleExit = () => {
     const reallyExit = confirm('Deseja realmente sair?')
 
@@ -88,39 +78,54 @@ export default function Report() {
     }
   }
 
+  const playAudio = async (type) => {
+    const audio = new Audio(type === true ? BipSuccess : BipError)
+    audio.play()
+  }
+
+  const bipError = async (msg) => {
+    toast.error(msg || 'Erro ao validar código de barras.')
+    await playAudio(false)
+  }
+
   const barcodeMutation = useMutation({
     mutationFn: async () => {
       const barcodeInput = barcodeRef.current
-      if (!barcodeInput.value || barcodeInput.disabled) return
-      
+
       barcodeInput.disabled = true
 
-      // await api.post('/bipagem/codigoDeBarras', {
-      //   idNota: '',
-      //   transporte: params.id,
-      //   codigoDeBarras: barcodeInput.value
-      // })
-      return {msg: 'erro'}
+      try {
+        const result = await api.post('/bipagem/codigoDeBarras', {
+          transporte: params.id,
+          codigoDeBarras: barcodeInput.value,
+        })
+
+        if (result.data === true) {
+          toast.success('Código de barras validado com sucesso!')
+          setQuantityBip(quantityBip + 1)
+          await playAudio(true)
+        } else if (result.status === 200) {
+          toast.warning(result.data.msg)
+          await playAudio(true)
+          return
+        }
+
+        barcodeInput.disabled = false
+      } catch (error) {
+        if (error.response && error.response.data.msg)
+          await bipError(error.response.data.msg)
+        else await bipError()
+
+        releaseReadingRef.current.disabled = false
+      }
     },
-    mutationKey: ['barcode']
+    mutationKey: ['barcode'],
   })
-
-  const handleBarcode = () => {
-    const barcodeInput = barcodeRef.current
-    if (!barcodeInput.value || barcodeInput.disabled) return
-    barcodeInput.disabled = true
-
-    // setTimeout(() => {
-    //   alert('Erro: leitura bloqueada')
-    //   toggleReleaseReadingDisabled()
-    //   return
-    // }, [3000])
-
-    // barcodeInput.disabled = false;
-  }
 
   useEffect(() => {
     releaseReadingRef.current.disabled = true
+
+    barcodeRef.current.focus()
   }, [])
 
   return (
@@ -141,23 +146,13 @@ export default function Report() {
             </h1>
           </div>
         </div>
-        <CardReport
-          // children={{
-            data={params}
-            // charge: 198179,
-            // campaign: 'M&N_BISC_BYTES_MONT_SJ',
-            // region: 'BA',
-            // boxes: 980,
-            // weight: 13061.02,
-            // m3: 14.41,
-          // }}
-        />
+        <CardReport data={params} />
         <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
           {quantityBip}
         </div>
         <Input
           ref={barcodeRef}
-          onChange={handleBarcode}
+          onChange={barcodeMutation.mutate}
           className="text my-10 h-16"
           placeholder="Código de barras"
         />
