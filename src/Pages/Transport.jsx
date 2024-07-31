@@ -91,6 +91,7 @@ export default function Report() {
   const barcodeMutation = useMutation({
     mutationFn: async () => {
       const barcodeInput = barcodeRef.current
+      if(!barcodeInput.value.length) return
 
       barcodeInput.disabled = true
 
