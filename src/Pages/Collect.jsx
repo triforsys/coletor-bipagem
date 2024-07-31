@@ -29,7 +29,7 @@ export default function Collect() {
 
   const redirectToTransportPage = (report) =>
     navigate(
-      `/transporte/?tranporte&id=${report.Transporte}&campanha=${String(report.Campanha).replaceAll('&', '%26')}&regiao=${report.Regiao}&peso=${report.Peso}&m3=${report.M3}&caixas=${report.TotalCaixas}`,
+      `/transporte/?tranporte&id=${Number(report.Transporte)}&campanha=${String(report.Campanha).replaceAll('&', '%26')}&regiao=${report.Regiao}&peso=${report.Peso}&m3=${report.M3}&caixas=${report.TotalCaixas}`,
     )
 
   const CardReport = ({ children: report }) => {
@@ -45,7 +45,7 @@ export default function Collect() {
           </Button>
         </div>
         <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">Transporte: {report.Transporte}</p>
+          <p className="font-bold">Transporte: {Number(report.Transporte)}</p>
           <p className="text-ellipsis overflow-hidden">
             Campanha: {report.Campanha}
           </p>
