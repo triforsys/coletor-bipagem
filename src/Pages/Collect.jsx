@@ -29,7 +29,7 @@ export default function Collect() {
 
   const redirectToTransportPage = (report) =>
     navigate(
-      `/transporte/?tranporte&id=${Number(report.Transporte)}&campanha=${String(report.Campanha).replaceAll('&', '%26')}&regiao=${report.Regiao}&peso=${report.Peso}&m3=${report.M3}&caixas=${report.TotalCaixas}`,
+      `/transporte/?tranporte&id=${report.Transporte}&campanha=${String(report.Campanha).replaceAll('&', '%26')}&regiao=${report.Regiao}&peso=${report.Peso}&m3=${report.M3}&caixas=${report.TotalCaixas}`,
     )
 
   const CardReport = ({ children: report }) => {

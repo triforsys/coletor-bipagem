@@ -16,7 +16,7 @@ const CardReport = ({ data }) => (
       <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
     </div>
     <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-      <p className="font-bold">Transporte: {data.id}</p>
+      <p className="font-bold">Transporte: {Number(data.id)}</p>
       <p className="text-ellipsis overflow-hidden">Campanha: {data.campanha}</p>
       <p className="text-ellipsis overflow-hidden">Região: {data.regiao}</p>
       <div className="flex gap-3">
@@ -55,7 +55,7 @@ export default function Report() {
     }
   }
 
-  const handleStop = () => {
+  const handleStop = async () => {
     const stopMotivate = prompt(
       'Informe o motivo da parada (30 caracteres)',
     ).slice(0, 30)
@@ -63,7 +63,15 @@ export default function Report() {
     if (stopMotivate.length < 10)
       prompt('Motivo precisa ter pelo menos 10 caracteres')
 
-    if (confirm('Deseja realmente parar?')) goBack()
+    if (confirm('Deseja realmente parar?')) {
+      try {
+        const result = await motivateMutation.mutateAsync(stopMotivate)
+        console.log(result)
+        if (result === true) goBack()
+      } catch {
+        toast.error('Erro ao adicionar motivo da parada')
+      }
+    }
   }
 
   const handleFinish = () => {
@@ -91,7 +99,7 @@ export default function Report() {
   const barcodeMutation = useMutation({
     mutationFn: async () => {
       const barcodeInput = barcodeRef.current
-      if(!barcodeInput.value.length) return
+      if (!barcodeInput.value.length) return
 
       barcodeInput.disabled = true
 
@@ -121,6 +129,14 @@ export default function Report() {
       }
     },
     mutationKey: ['barcode'],
+  })
+
+  const motivateMutation = useMutation({
+    mutationFn: async (motivo) =>
+      await api.post('/bipagem/set/motivo/coleta', {
+        transporte: params.id,
+        motivo,
+      }).then((response) => response.data),
   })
 
   useEffect(() => {
