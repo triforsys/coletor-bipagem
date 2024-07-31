@@ -66,7 +66,6 @@ export default function Report() {
     if (confirm('Deseja realmente parar?')) {
       try {
         const result = await motivateMutation.mutateAsync(stopMotivate)
-        console.log(result)
         if (result === true) goBack()
       } catch {
         toast.error('Erro ao adicionar motivo da parada')
