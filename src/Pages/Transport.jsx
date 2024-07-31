@@ -56,16 +56,17 @@ export default function Report() {
   }
 
   const handleStop = async () => {
-    const stopMotivate = prompt(
-      'Informe o motivo da parada (30 caracteres)',
-    ).slice(0, 30)
+    let motivate = ''
+    motivate = prompt('Informe o motivo da parada (30 caracteres)')
 
-    if (stopMotivate.length < 10)
-      prompt('Motivo precisa ter pelo menos 10 caracteres')
+    if (!motivate || motivate.length < 10)
+      motivate = prompt('Motivo precisa ter pelo menos 10 caracteres')
+
+    if (!motivate || motivate.length < 10) return
 
     if (confirm('Deseja realmente parar?')) {
       try {
-        const result = await motivateMutation.mutateAsync(stopMotivate)
+        const result = await motivateMutation.mutateAsync(motivate.slice(0, 30))
         if (result === true) goBack()
       } catch {
         toast.error('Erro ao adicionar motivo da parada')
@@ -112,13 +113,13 @@ export default function Report() {
           toast.success('Código de barras validado com sucesso!')
           setQuantityBip(quantityBip + 1)
           await playAudio(true)
+          barcodeInput.disabled = false
         } else if (result.status === 200) {
           toast.warning(result.data.msg)
           await playAudio(true)
-          return
         }
 
-        barcodeInput.disabled = false
+        barcodeInput.value = ''
       } catch (error) {
         if (error.response && error.response.data.msg)
           await bipError(error.response.data.msg)
@@ -132,10 +133,12 @@ export default function Report() {
 
   const motivateMutation = useMutation({
     mutationFn: async (motivo) =>
-      await api.post('/bipagem/set/motivo/coleta', {
-        transporte: params.id,
-        motivo,
-      }).then((response) => response.data),
+      await api
+        .post('/bipagem/set/motivo/coleta', {
+          transporte: params.id,
+          motivo,
+        })
+        .then((response) => response.data),
   })
 
   useEffect(() => {
