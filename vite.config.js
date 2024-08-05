@@ -17,9 +17,9 @@ export default defineConfig({
         sourcemap: true,
       },
       includeAssets: [
-        'favicon.png',
-        'android-chrome-192x192.png',
-        'android-chrome-512x512.png',
+        'favicon-32x32.png',
+        'pwa-192x192.png',
+        'pwa-512x512.png',
       ],
       manifest: {
         name: 'Bipagem',
@@ -33,13 +33,13 @@ export default defineConfig({
         theme_color: '#137bff',
         icons: [
           {
-            src: '/android-chrome-192x192.png',
+            src: '/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/android-chrome-512x512.png',
+            src: '/pwa-maskable-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',

@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           visibleToasts={1}
           closeButton
           expand={false}
-          position="bottom-left"
+          position="top-right"
         />
         <Routes />
       </AuthProvider>

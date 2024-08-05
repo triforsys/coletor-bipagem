@@ -30,7 +30,10 @@ export const AuthProvider = ({ children }) => {
         return false;
       } else {
         setUser(response.data);
-        api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
+        api.interceptors.request.use((config)=> {
+          config.headers.Authorization = `Bearer ${response.data.token}`;
+          return config;
+        })
         localStorage.setItem('@Auth:token', response.data.token);
         return true;
       }

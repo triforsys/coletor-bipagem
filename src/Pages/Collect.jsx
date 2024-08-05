@@ -1,42 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import Toggle from '@/components/utils/Toggle'
 import { Input } from '@/components/ui/input'
-
-const reportList = [
-  {
-    transport: 198174,
-    campaign: 'LINHA',
-    region: 'BA',
-    boxes: 2024,
-    weight: 13061.02,
-    m3: 14.41,
-  },
-  {
-    transport: 198179,
-    campaign: 'M&N_BISC_BYTES_MONT_SJ',
-    region: 'BA',
-    boxes: 980,
-    weight: 13061.02,
-    m3: 14.41,
-  },
-]
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 
 export default function Collect() {
   const navigate = useNavigate()
-  const [filteredList, setFilteredList] = useState([])
-
   const goBack = () => navigate(-1)
 
-  useEffect(() => {
-    setFilteredList(reportList)
-  }, [])
+  const collectId = window.location.pathname.split('/')[2]
+
+  const { data, isFetched } = useQuery({
+    queryKey: ['list'],
+    queryFn: async () => {
+      const query = await api
+        .get(`/bipagem/transportes/${collectId}`)
+        .then((response) => response.data)
+      setList(query)
+      return query
+    },
+    initialData: [],
+  })
+
+  const [list, setList] = useState([])
 
   const redirectToTransportPage = (report) =>
     navigate(
-      `/transporte/?tranporte&id=${report.transport}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
+      `/transporte/?tranporte&id=${report.Transporte}&campanha=${String(report.Campanha).replaceAll('&', '%26')}&regiao=${report.Regiao}&peso=${report.Peso}&m3=${report.M3}&caixas=${report.TotalCaixas}`,
     )
 
   const CardReport = ({ children: report }) => {
@@ -52,20 +45,18 @@ export default function Collect() {
           </Button>
         </div>
         <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">Transporte: {report.transport}</p>
+          <p className="font-bold">Transporte: {Number(report.Transporte)}</p>
           <p className="text-ellipsis overflow-hidden">
-            Campanha: {report.campaign}
+            Campanha: {report.Campanha}
           </p>
           <p className="text-ellipsis overflow-hidden">
-            Região: {report.region}
+            Região: {report.Regiao}
           </p>
           <div className="flex gap-3">
-            <p className="text-ellipsis overflow-hidden">
-              Peso: {report.weight}
-            </p>
-            <p className="text-ellipsis overflow-hidden">M3: {report.m3}</p>
+            <p className="text-ellipsis overflow-hidden">Peso: {report.Peso}</p>
+            <p className="text-ellipsis overflow-hidden">M3: {report.M3}</p>
           </div>
-          <p>Caixas: {report.boxes}</p>
+          <p>Caixas: {report.TotalCaixas}</p>
         </div>
       </div>
     )
@@ -77,18 +68,18 @@ export default function Collect() {
     e.preventDefault()
     const transportValue = transportRef.current.value
 
-    if (transportValue.length < 5) setFilteredList(reportList)
+    if (transportValue.length < 5) setList(data)
     else
-      setFilteredList(
-        reportList.filter((item) =>
-          String(item.transport).startsWith(transportValue),
+      setList(
+        data.filter((item) =>
+          String(item.Transporte).startsWith(transportValue),
         ),
       )
   }
 
   return (
     <div className="flex justify-center gap-2 mt-4 font-poppins">
-      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4">
+      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
         <div className="w-[370px] md:w-full">
           <div className="w-full flex justify-center relative mb-6 items-center">
             <div className="left-0 absolute">
@@ -100,9 +91,7 @@ export default function Collect() {
               </Button>
             </div>
             <div className="flex justify-center">
-              <h1 className="text-2xl text-neutral-500">
-                Coleta: {window.location.pathname.split('/')[2]}
-              </h1>
+              <h1 className="text-2xl text-neutral-500">Coleta: {collectId}</h1>
             </div>
           </div>
           <Toggle>
@@ -113,6 +102,7 @@ export default function Collect() {
                     Transporte
                   </label>
                   <Input
+                    minLength={5}
                     id="input-charge"
                     ref={transportRef}
                     className="bg-white"
@@ -127,9 +117,16 @@ export default function Collect() {
             </form>
           </Toggle>
         </div>
-        {filteredList.map((report) => (
-          <CardReport key={report.transport}>{report}</CardReport>
-        ))}
+
+        {isFetched && !list.length ? (
+          <div className="flex justify-center mt-4 text-2xl w-full">
+            Nenhum resultado encontrado
+          </div>
+        ) : (
+          list.map((report) => (
+            <CardReport key={report.Transporte}>{report}</CardReport>
+          ))
+        )}
       </div>
     </div>
   )
