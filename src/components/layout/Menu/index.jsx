@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import SidebarItem from '@/components/layout/SidebarItem';
-import logo from '../../../assets/Logo_KMC.png';
 import {
   Command,
   CommandGroup,
@@ -33,16 +32,7 @@ export default function Sidebar({ children }) {
     {
       group: 'InteliPost',
       items: [
-        {
-          link: '/inteliPost/ocorrencia',
-          icon: <Book />,
-          text: 'API Ocorrência',
-        },
-        {
-          link: '/inteliPost/comprovante',
-          icon: <File />,
-          text: 'API Canhoto',
-        },
+        
       ],
     },
   ];

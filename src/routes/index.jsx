@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NotFound from '../Pages/NotFound';
 import Login from '../Pages/Login';
-import Home from '@/Pages/Home';
+import Collects from '@/Pages/Collects';
 import { PrivateRoute } from './privateRoutes';
-import Ocorrencia from '@/Pages/Ocorrencia';
-import Comprovante from '@/Pages/Comprovante';
+import Transport from '@/Pages/Transport';
+import Collect from '@/Pages/Collect';
 
 export default function Rotas() {
   return (
@@ -12,39 +12,29 @@ export default function Rotas() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
-          path="/home"
+          path="/coletas"
           element={
             <PrivateRoute>
-              <Home />
+              <Collects />
             </PrivateRoute>
           }
         />
         <Route
-          path="/inteliPost/ocorrencia"
+          path="/coleta/:id"
           element={
             <PrivateRoute>
-              <Ocorrencia />
+              <Collect />
             </PrivateRoute>
           }
         />
         <Route
-          path="/inteliPost/comprovante"
+          path="/transporte"
           element={
             <PrivateRoute>
-              <Comprovante />
+              <Transport />
             </PrivateRoute>
           }
         />
-        {/* <Route path="/home" element={<PrivateRoute />}>
-          <Route path="/home" element={<Home />} />
-        </Route> */}
-
-        {/* <Route path="/khan/autorizacao/pagamento" element={<PrivateRoute />}>
-          <Route
-            path="/khan/autorizacao/pagamento"
-            element={<AutorizacaoPagamento />}
-          />
-        </Route> */}
 
         <Route path="*" element={<NotFound />} />
       </Routes>
