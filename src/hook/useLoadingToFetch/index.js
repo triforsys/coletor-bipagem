@@ -61,6 +61,10 @@ export async function useLoadingToFetchLogin(
           toast.error(response?.data?.msg, { id: loadingToast });
           return false;
         }
+        else if (response?.data?.msg === 'Senha inválida!') {
+          toast.error(response?.data?.msg, { id: loadingToast });
+          return false;
+        }
       } else {
         toast.dismiss(loadingToast)
         return response?.data;
