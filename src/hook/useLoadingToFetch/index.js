@@ -35,3 +35,39 @@ export async function useLoadingToFetch(
     throw err;
   }
 }
+
+export async function useLoadingToFetchLogin(
+  msgLoading = 'Carregando...',
+  url,
+  type,
+  data = null,
+) {
+  const loadingToast = toast(msgLoading)
+
+  try {
+    let response = null;
+    if (type === 'post') response = await api[type](url, data);
+    if (type === 'get') response = await api[type](url);
+
+    if (response.status === 200) {
+      if (response?.data?.msg !== undefined) {
+        if (response?.data?.msg === 'Usuário não encontrado!') {
+          toast.error(response?.data?.msg, { id: loadingToast });
+          return false;
+        } else if (response?.data?.msg === 'Usuário desativado!') {
+          toast.warning(response?.data?.msg, { id: loadingToast });
+          return false;
+        } else if (response?.data?.msg === 'Usuário não é administrador!') {
+          toast.error(response?.data?.msg, { id: loadingToast });
+          return false;
+        }
+      } else {
+        toast.dismiss(loadingToast)
+        return response?.data;
+      }
+    }
+  } catch (err) {
+    toast.error('Erro inesperado.', { id: loadingToast });
+    throw err;
+  }
+}

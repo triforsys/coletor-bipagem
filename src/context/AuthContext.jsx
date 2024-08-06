@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'sonner'; // import { setCookie, destroyCookie } from 'nookies'
+import { useLoadingToFetchLogin } from '@/hook/useLoadingToFetch';
 
 export const AuthContext = createContext({});
 
@@ -23,23 +24,26 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async ({ login, password }) => {
     try {
-      const response = await api.post('/login', { login, password });
-      if (response?.data?.msg === 'Senha inválida!' || response?.data === '') {
-        // alert('Senha inválida!', response?.data);
-        toast.error('Login ou senha inválidos!');
+      const response = await useLoadingToFetchLogin(
+        'Buscando usuário...',
+        '/login',
+        'post',
+        { login, password },
+      );
+      if (response === false) {
         return false;
       } else {
-        setUser(response.data);
-        api.interceptors.request.use((config)=> {
-          config.headers.Authorization = `Bearer ${response.data.token}`;
+        setUser(response);
+        api.interceptors.request.use((config) => {
+          config.headers.Authorization = `Bearer ${response.token}`;
           return config;
-        })
-        localStorage.setItem('@Auth:token', response.data.token);
+        });
+        localStorage.setItem('@Auth:token', response.token);
         return true;
       }
     } catch (error) {
       console.log('DEU RUIM LOGIN', error);
-      toast.error('Erro ao logar contate o administrador!');
+      // toast.error('Erro ao logar contate o administrador!');
       return false;
     }
   };
