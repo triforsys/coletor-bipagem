@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import BipError from '../assets/notifications/erroBip.mp3'
 import BipSuccess from '../assets/notifications/Papa-Leguas.mp3'
+import Navbar from '@/components/layout/Navbar'
 
 const CardReport = ({ data }) => (
   <div className="flex rounded-2xl card-shadow min-w-[370px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2">
@@ -148,60 +149,62 @@ export default function Report() {
   }, [])
 
   return (
-    <div className="flex justify-center gap-2 mt-4 font-poppins">
-      <div className="flex flex-wrap justify-center xl:justify-normal p-4 gap-4">
-        <div className="w-full flex justify-center relative mb-4 items-center">
-          <div className="left-0 absolute">
-            <Button
-              onClick={goBack}
-              className="bg-tangaroa-400 hover:bg-tangaroa-300 h-10 w-14"
-            >
-              <ChevronLeftIcon />
-            </Button>
+    <Navbar>
+      <div className="flex justify-center gap-2 mt-4 font-poppins">
+        <div className="flex flex-wrap justify-center xl:justify-normal p-4 gap-4">
+          <div className="w-full flex justify-center relative mb-4 items-center">
+            <div className="left-0 absolute">
+              <Button
+                onClick={goBack}
+                className="bg-tangaroa-400 hover:bg-tangaroa-300 h-10 w-14"
+              >
+                <ChevronLeftIcon />
+              </Button>
+            </div>
+            <div className="flex justify-center">
+              <h1 className="text-xl text-neutral-500">
+                Relatório de carregamento
+              </h1>
+            </div>
           </div>
-          <div className="flex justify-center">
-            <h1 className="text-xl text-neutral-500">
-              Relatório de carregamento
-            </h1>
+          <CardReport data={params} />
+          <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
+            {quantityBip}
           </div>
-        </div>
-        <CardReport data={params} />
-        <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
-          {quantityBip}
-        </div>
-        <Input
-          ref={barcodeRef}
-          onChange={barcodeMutation.mutate}
-          className="text my-10 h-16"
-          placeholder="Código de barras"
-        />
-        <div className="w-full text-center flex justify-center border-t-[1px] border-t-black pt-2">
-          <div className="w-full  flex flex-col lg:flex-row gap-2">
-            <Button
-              className="w-full rounded-md bg-tangaroa-400 hover:bg-tangaroa-300"
-              onClick={handleReleaseReading}
-              ref={releaseReadingRef}
-            >
-              LIBERAR LEITURA
-            </Button>
-            <Button className="w-full button rounded-md" onClick={handleStop}>
-              PARAR
-            </Button>
-            <Button
-              className="w-full rounded-md bg-red-500 hover:bg-red-400"
-              onClick={handleFinish}
-            >
-              FINALIZAR
-            </Button>
-            <Button
-              className="w-full rounded-md bg-black hover:bg-gray-900"
-              onClick={handleExit}
-            >
-              SAIR
-            </Button>
+          <Input
+            ref={barcodeRef}
+            onChange={barcodeMutation.mutate}
+            className="text my-10 h-16"
+            placeholder="Código de barras"
+          />
+          <div className="w-full text-center flex justify-center border-t-[1px] border-t-black pt-2">
+            <div className="w-full  flex flex-col lg:flex-row gap-2">
+              <Button
+                className="w-full rounded-md bg-tangaroa-400 hover:bg-tangaroa-300"
+                onClick={handleReleaseReading}
+                ref={releaseReadingRef}
+              >
+                LIBERAR LEITURA
+              </Button>
+              <Button className="w-full button rounded-md" onClick={handleStop}>
+                PARAR
+              </Button>
+              <Button
+                className="w-full rounded-md bg-red-500 hover:bg-red-400"
+                onClick={handleFinish}
+              >
+                FINALIZAR
+              </Button>
+              <Button
+                className="w-full rounded-md bg-black hover:bg-gray-900"
+                onClick={handleExit}
+              >
+                SAIR
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Navbar>
   )
 }

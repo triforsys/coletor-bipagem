@@ -2,11 +2,13 @@ import React, { useRef } from 'react'
 import { TruckIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { api } from '@/lib/api'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useQuery } from '@tanstack/react-query'
-import Toggle from '@/components/utils/Toggle'
+
+import { api } from '@/lib/api'
 import { Input } from '@/components/ui/input'
+import Toggle from '@/components/utils/Toggle'
+import { Skeleton } from '@/components/ui/skeleton'
+import Navbar from '@/components/layout/Navbar'
 
 export default function Collects() {
   const navigate = useNavigate()
@@ -139,44 +141,46 @@ export default function Collects() {
   }
 
   return (
-    <div className="flex justify-center gap-2 mt-4 font-poppins">
-      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
-        <div className="w-[370px] md:w-full">
-          <Toggle>
-            <form className="flex flex-col gap-2" onSubmit={handleFilter}>
-              <div className="flex flex-wrap items-end gap-4">
-                <div className="w-full md:w-2/5">
-                  <label htmlFor="input-charge" className="text-white gap-1">
-                    Coleta
-                  </label>
-                  <Input
-                    id="input-charge"
-                    ref={coletaRef}
-                    minLength={5}
-                    className="bg-white"
-                  />
+    <Navbar>
+      <div className="flex justify-center gap-2 mt-4 font-poppins">
+        <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
+          <div className="w-[370px] md:w-full">
+            <Toggle>
+              <form className="flex flex-col gap-2" onSubmit={handleFilter}>
+                <div className="flex flex-wrap items-end gap-4">
+                  <div className="w-full md:w-2/5">
+                    <label htmlFor="input-charge" className="text-white gap-1">
+                      Coleta
+                    </label>
+                    <Input
+                      id="input-charge"
+                      ref={coletaRef}
+                      minLength={5}
+                      className="bg-white"
+                    />
+                  </div>
+                  <div className="flex mt-4 w-full md:w-1/6 ml-auto">
+                    <Button className="w-full h-10 bg-tangaroa-400 hover:bg-tangaroa-300">
+                      Filtrar
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex mt-4 w-full md:w-1/6 ml-auto">
-                  <Button className="w-full h-10 bg-tangaroa-400 hover:bg-tangaroa-300">
-                    Filtrar
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </Toggle>
-        </div>
-        {isLoading ? (
-          [0, 1].map((item) => <CardSkeleton key={item} />)
-        ) : isFetched && !data.length ? (
-          <div className="flex justify-center mt-4 text-2xl w-full">
-            Nenhum resultado encontrado
+              </form>
+            </Toggle>
           </div>
-        ) : (
-          data.map((report, index) => (
-            <CardReport key={report.Coleta + index}>{report}</CardReport>
-          ))
-        )}
+          {isLoading ? (
+            [0, 1].map((item) => <CardSkeleton key={item} />)
+          ) : isFetched && !data.length ? (
+            <div className="flex justify-center mt-4 text-2xl w-full">
+              Nenhum resultado encontrado
+            </div>
+          ) : (
+            data.map((report, index) => (
+              <CardReport key={report.Coleta + index}>{report}</CardReport>
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </Navbar>
   )
 }
