@@ -1,11 +1,13 @@
-import React, { useRef, useState } from 'react'
-import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
-import Toggle from '@/components/utils/Toggle'
-import { Input } from '@/components/ui/input'
+import React, { useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
+
 import { api } from '@/lib/api'
+import { Input } from '@/components/ui/input'
+import Toggle from '@/components/utils/Toggle'
+import { Button } from '@/components/ui/button'
+import Navbar from '@/components/layout/Navbar'
 
 export default function Collect() {
   const navigate = useNavigate()
@@ -78,56 +80,60 @@ export default function Collect() {
   }
 
   return (
-    <div className="flex justify-center gap-2 mt-4 font-poppins">
-      <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
-        <div className="w-[370px] md:w-full">
-          <div className="w-full flex justify-center relative mb-6 items-center">
-            <div className="left-0 absolute">
-              <Button
-                onClick={goBack}
-                className="bg-tangaroa-400 hover:bg-tangaroa-300 h-10 w-14"
-              >
-                <ChevronLeftIcon />
-              </Button>
-            </div>
-            <div className="flex justify-center">
-              <h1 className="text-2xl text-neutral-500">Coleta: {collectId}</h1>
-            </div>
-          </div>
-          <Toggle>
-            <form className="flex flex-col gap-2" onSubmit={filter}>
-              <div className="flex flex-wrap items-end gap-4">
-                <div className=" w-full md:w-2/5">
-                  <label htmlFor="input-charge" className="text-white gap-1">
-                    Transporte
-                  </label>
-                  <Input
-                    minLength={5}
-                    id="input-charge"
-                    ref={transportRef}
-                    className="bg-white"
-                  />
-                </div>
-                <div className="flex mt-4 w-full md:w-1/6 ml-auto">
-                  <Button className="w-full h-10 bg-tangaroa-400 hover:bg-tangaroa-300">
-                    Filtrar
-                  </Button>
-                </div>
+    <Navbar>
+      <div className="flex justify-center gap-2 mt-4 font-poppins">
+        <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
+          <div className="w-[370px] md:w-full">
+            <div className="w-full flex justify-center relative mb-6 items-center">
+              <div className="left-0 absolute">
+                <Button
+                  onClick={goBack}
+                  className="bg-tangaroa-400 hover:bg-tangaroa-300 h-10 w-14"
+                >
+                  <ChevronLeftIcon />
+                </Button>
               </div>
-            </form>
-          </Toggle>
-        </div>
-
-        {isFetched && !list.length ? (
-          <div className="flex justify-center mt-4 text-2xl w-full">
-            Nenhum resultado encontrado
+              <div className="flex justify-center">
+                <h1 className="text-2xl text-neutral-500">
+                  Coleta: {collectId}
+                </h1>
+              </div>
+            </div>
+            <Toggle>
+              <form className="flex flex-col gap-2" onSubmit={filter}>
+                <div className="flex flex-wrap items-end gap-4">
+                  <div className=" w-full md:w-2/5">
+                    <label htmlFor="input-charge" className="text-white gap-1">
+                      Transporte
+                    </label>
+                    <Input
+                      minLength={5}
+                      id="input-charge"
+                      ref={transportRef}
+                      className="bg-white"
+                    />
+                  </div>
+                  <div className="flex mt-4 w-full md:w-1/6 ml-auto">
+                    <Button className="w-full h-10 bg-tangaroa-400 hover:bg-tangaroa-300">
+                      Filtrar
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </Toggle>
           </div>
-        ) : (
-          list.map((report) => (
-            <CardReport key={report.Transporte}>{report}</CardReport>
-          ))
-        )}
+
+          {isFetched && !list.length ? (
+            <div className="flex justify-center mt-4 text-2xl w-full">
+              Nenhum resultado encontrado
+            </div>
+          ) : (
+            list.map((report) => (
+              <CardReport key={report.Transporte}>{report}</CardReport>
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </Navbar>
   )
 }
