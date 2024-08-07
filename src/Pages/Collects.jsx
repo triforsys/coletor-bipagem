@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { TruckIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -7,11 +7,14 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useQuery } from '@tanstack/react-query'
 import Toggle from '@/components/utils/Toggle'
 import { Input } from '@/components/ui/input'
+import DrawerUtils from '@/components/utils/Drawer'
 
 export default function Collects() {
   const navigate = useNavigate()
 
   const coletaRef = useRef()
+
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   const { data, isLoading, isFetched, refetch } = useQuery({
     queryKey: ['list'],
@@ -39,6 +42,13 @@ export default function Collects() {
     if (report.invoiced) return 'released'
     // TODO: check finished status
   }
+  const toggleDrawer = async () => {
+    // TODO: resetar ordemColeta, regiao e openDrawer
+  }
+
+  const handleClick = async (ordemColeta, regiao) => {
+    setOpenDrawer(true)
+  }
 
   const CardReport = ({ children: report }) => {
     const buttonType = getButtonType(report)
@@ -47,21 +57,6 @@ export default function Collects() {
       <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[250px] gap-2">
         <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
           <TruckIcon className="w-[78px] h-[75px] text-tangaroa-100" />
-          {/* {buttonType === 'released' ? (
-            <Button
-              className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
-              onClick={() => redirectToCollectPage(report.collect)}
-            >
-              Iniciar
-            </Button>
-          ) : (
-            <Button
-              className="rounded-[10px] w-20 h-6 text-xs disabled:bg-tangaroa-100 disabled:text-tangaroa-950"
-              disabled
-            >
-              Em progresso
-            </Button>
-          )} */}
         </div>
         <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
           <p className="font-bold">Coleta: {report.Coleta}</p>
@@ -71,30 +66,24 @@ export default function Collects() {
           <p>Placa Veículo: {report.Placa}</p>
           <p>Motorista: {report.Motorista}</p>
           <p>Doca: {report.Doca}</p>
+          <p>Região: {report.regiao}</p>
           {/* {buttonType === 'released' ? ( */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 my-2">
             <Button
-              // disabled={!report.transportList.length}
+              disabled={report.qtdNotas === 0}
               onClick={() => redirectToCollectPage(report.Coleta)}
               className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
             >
               Remessa
             </Button>
             <Button
-              disabled
-              onClick={() => redirectToTransportPage(report)}
+              disabled={report.qtdNotas > 0}
+              onClick={handleClick}
               className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
             >
               Blocado
             </Button>
           </div>
-          {/* ) : (
-            <div className="flex justify-center">
-              <Button disabled className="size-28 h-10 bg-tangaroa-500">
-                Em progresso
-              </Button>
-            </div>
-          )} */}
         </div>
       </div>
     )
@@ -177,6 +166,13 @@ export default function Collects() {
           ))
         )}
       </div>
+      <DrawerUtils
+        drawerOpen={openDrawer}
+        drawerClose={() => setOpenDrawer(!openDrawer)}
+        onOpenChange={setOpenDrawer}
+        title="Deseja realizar a bipagem blocada?"
+        textButtonConfirm="Confirmar"
+      ></DrawerUtils>
     </div>
   )
 }
