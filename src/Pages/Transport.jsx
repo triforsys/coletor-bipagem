@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
+import { ChevronLeftIcon } from 'lucide-react'
 
 import { api } from '@/lib/api'
 import { Input } from '@/components/ui/input'
@@ -10,24 +10,7 @@ import { Button } from '@/components/ui/button'
 import BipError from '../assets/notifications/erroBip.mp3'
 import BipSuccess from '../assets/notifications/Papa-Leguas.mp3'
 import Navbar from '@/components/layout/Navbar'
-
-const CardReport = ({ data }) => (
-  <div className="flex rounded-2xl card-shadow min-w-[370px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2">
-    <div className="flex rounded-l-2xl justify-center min-w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
-      <BoxIcon className="w-[78px] h-[75px] text-tangaroa-50" />
-    </div>
-    <div className="flex max-w-56 flex-col justify-between py-2 pl-2 text-[15px]">
-      <p className="font-bold">Transporte: {Number(data.id)}</p>
-      <p className="text-ellipsis overflow-hidden">Campanha: {data.campanha}</p>
-      <p className="text-ellipsis overflow-hidden">Região: {data.regiao}</p>
-      <div className="flex gap-3">
-        <p className="text-ellipsis overflow-hidden">Peso: {data.peso}</p>
-        <p className="text-ellipsis overflow-hidden">M3: {data.m3}</p>
-      </div>
-      <p>Caixas: {data.caixas}</p>
-    </div>
-  </div>
-)
+import { Card, leftSideIcons } from '@/components/layout/Card'
 
 export default function Report() {
   const url = new URLSearchParams(document.location.href)
@@ -167,7 +150,22 @@ export default function Report() {
               </h1>
             </div>
           </div>
-          <CardReport data={params} />
+          <Card leftSideIcon={leftSideIcons('box')}>
+            <p className="font-bold">Transporte: {Number(params.id)}</p>
+            <p className="text-ellipsis overflow-hidden">
+              Campanha: {params.campanha}
+            </p>
+            <p className="text-ellipsis overflow-hidden">
+              Região: {params.regiao}
+            </p>
+            <div className="flex gap-3">
+              <p className="text-ellipsis overflow-hidden">
+                Peso: {params.peso}
+              </p>
+              <p className="text-ellipsis overflow-hidden">M3: {params.m3}</p>
+            </div>
+            <p>Caixas: {params.caixas}</p>
+          </Card>
           <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
             {quantityBip}
           </div>

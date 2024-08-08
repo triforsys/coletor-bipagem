@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import Toggle from '@/components/utils/Toggle'
 import { Button } from '@/components/ui/button'
 import Navbar from '@/components/layout/Navbar'
+import { Card, leftSideIcons } from '@/components/layout/Card'
 
 export default function Collect() {
   const navigate = useNavigate()
@@ -129,7 +130,36 @@ export default function Collect() {
             </div>
           ) : (
             list.map((report) => (
-              <CardReport key={report.Transporte}>{report}</CardReport>
+              <Card
+                leftSideIcon={leftSideIcons('box')}
+                leftSideChildren={
+                  <Button
+                    className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
+                    onClick={() => redirectToTransportPage(report)}
+                  >
+                    Iniciar
+                  </Button>
+                }
+              >
+                <p className="font-bold">
+                  Transporte: {Number(report.Transporte)}
+                </p>
+                <p className="text-ellipsis overflow-hidden">
+                  Campanha: {report.Campanha}
+                </p>
+                <p className="text-ellipsis overflow-hidden">
+                  Região: {report.Regiao}
+                </p>
+                <div className="flex gap-3">
+                  <p className="text-ellipsis overflow-hidden">
+                    Peso: {report.Peso}
+                  </p>
+                  <p className="text-ellipsis overflow-hidden">
+                    M3: {report.M3}
+                  </p>
+                </div>
+                <p>Caixas: {report.TotalCaixas}</p>
+              </Card>
             ))
           )}
         </div>
