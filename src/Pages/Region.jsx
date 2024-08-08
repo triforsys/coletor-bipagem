@@ -7,7 +7,11 @@ export default function Region() {
   const { ordemColeta, idColeta } = useParams()
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar>
+        <div className="flex justify-center gap-2 mt-4 font-poppins">
+          <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl"></div>
+        </div>
+      </Navbar>
     </>
   )
 }
