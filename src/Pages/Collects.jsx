@@ -2,14 +2,16 @@ import React, { useRef, useState } from 'react'
 import { TruckIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { api } from '@/lib/api'
+import { useLoadingToFetch } from '@/hook/useLoadingToFetch'
 import { Input } from '@/components/ui/input'
 import Toggle from '@/components/utils/Toggle'
 import { Skeleton } from '@/components/ui/skeleton'
 import Navbar from '@/components/layout/Navbar'
 import DrawerUtils from '@/components/utils/Drawer'
+import dayjs from 'dayjs'
 
 export default function Collects() {
   const navigate = useNavigate()
@@ -17,6 +19,9 @@ export default function Collects() {
   const coletaRef = useRef()
 
   const [openDrawer, setOpenDrawer] = useState(false)
+  const [collectionOrder, setCollectionOrder] = useState('')
+  const [region, setRegion] = useState('')
+  const [idCollection, setIdCollection] = useState('')
 
   const { data, isLoading, isFetched, refetch } = useQuery({
     queryKey: ['list'],
@@ -45,12 +50,33 @@ export default function Collects() {
     // TODO: check finished status
   }
   const toggleDrawer = async () => {
-    // TODO: resetar ordemColeta, regiao e openDrawer
+    setOpenDrawer(false)
+    setCollectionOrder('')
+    setRegion('')
+    setIdCollection('')
   }
 
-  const handleClick = async (ordemColeta, regiao) => {
+  const handleClick = async (ordemColeta, regiao, idColeta) => {
     setOpenDrawer(true)
+    setCollectionOrder(ordemColeta)
+    setRegion(regiao)
+    setIdCollection(idColeta)
   }
+
+  const mutationRegion = useMutation({
+    mutationFn: async () =>
+      useLoadingToFetch(
+        'Inserindo dados da região.',
+        '/bipagem/set/regiao/blocado',
+        'post',
+        {
+          ordemColeta: collectionOrder,
+          region: region,
+          idColeta: idCollection,
+        },
+      ),
+  })
+  const handleSaveRegion = async () => {}
 
   const CardReport = ({ children: report }) => {
     const buttonType = getButtonType(report)
@@ -61,8 +87,10 @@ export default function Collects() {
           <TruckIcon className="w-[78px] h-[75px] text-tangaroa-100" />
         </div>
         <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">Coleta: {report.Coleta}</p>
-          <p>Agenda: {new Date(report.Agenda).toLocaleString()}</p>
+          <p className="font-bold">
+            Coleta: {report.Coleta} / {report.transporte}
+          </p>
+          <p>Agenda: {dayjs(report.Agenda).format('DD/MM/YYYY HH:mm')}</p>
           <p>Transportadora: {report.Transportadora}</p>
           <p>Tipo Veículo: {report.Veiculo}</p>
           <p>Placa Veículo: {report.Placa}</p>
@@ -80,7 +108,9 @@ export default function Collects() {
             </Button>
             <Button
               disabled={report.qtdNotas > 0}
-              onClick={handleClick}
+              onClick={() =>
+                handleClick(report.Coleta, report.regiao, report.idColeta)
+              }
               className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
             >
               Blocado
