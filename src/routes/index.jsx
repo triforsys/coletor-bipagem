@@ -1,10 +1,11 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NotFound from '../Pages/NotFound';
-import Login from '../Pages/Login';
-import Collects from '@/Pages/Collects';
-import { PrivateRoute } from './privateRoutes';
-import Transport from '@/Pages/Transport';
-import Collect from '@/Pages/Collect';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import NotFound from '../Pages/NotFound'
+import Login from '../Pages/Login'
+import Collects from '@/Pages/Collects'
+import { PrivateRoute } from './privateRoutes'
+import Transport from '@/Pages/Transport'
+import Collect from '@/Pages/Collect'
+import Region from '@/Pages/Region'
 
 export default function Rotas() {
   return (
@@ -36,8 +37,17 @@ export default function Rotas() {
           }
         />
 
+        <Route
+          path="/regiao/:ordemColeta/:idColeta"
+          element={
+            <PrivateRoute>
+              <Region />
+            </PrivateRoute>
+          }
+        />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }

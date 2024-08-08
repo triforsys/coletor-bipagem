@@ -14,6 +14,7 @@ import DrawerUtils from '@/components/utils/Drawer'
 import dayjs from 'dayjs'
 import { Card, leftSideIcons } from '@/components/layout/Card'
 import { CardSkeleton } from '@/components/layout/CardSkeleton'
+import { toast } from 'sonner'
 
 export default function Collects() {
   const navigate = useNavigate()
@@ -24,45 +25,50 @@ export default function Collects() {
   const [collectionOrder, setCollectionOrder] = useState('')
   const [region, setRegion] = useState('')
   const [idCollection, setIdCollection] = useState('')
+  const [hasRegion, setHasRegion] = useState(false)
 
   const { data, isLoading, isFetched, refetch } = useQuery({
     queryKey: ['list'],
     queryFn: async () => {
-      const query = await api
-        .post('/bipagem/coletas', { coleta: coletaRef.current.value })
-        .then((response) => response.data)
+      const query = await useLoadingToFetch(
+        'Buscando dados...',
+        '/bipagem/coletas',
+        'post',
+        { coleta: coletaRef.current.value },
+      )
       return query
     },
     initialData: [],
   })
 
-  // const reportListFiltered = data.filter(
-  //   (report) => report.statusColeta !== 'acionada',
-  // )
-
   const redirectToCollectPage = (collect) => navigate(`/coleta/${collect}`)
-  const redirectToTransportPage = (report) =>
+  const redirectToTransportPage = (report) => {
     navigate(
       `/transporte/?tranporte&id=${report.Coleta}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
     )
+  }
 
-  const getButtonType = (report) => {
-    // if (report.readVolumes > 0) return 'progress' // TODO: GET QTD VOLUMES
-    if (report.invoiced) return 'released'
-    // TODO: check finished status
+  const handleNavigateRegion = async (collectionOrder, idCollection) => {
+    navigate(`/regiao/${collectionOrder}/${idCollection}`)
   }
   const toggleDrawer = async () => {
     setOpenDrawer(false)
     setCollectionOrder('')
     setRegion('')
     setIdCollection('')
+    setHasRegion(false)
   }
 
-  const handleClick = async (ordemColeta, regiao, idColeta) => {
-    setOpenDrawer(true)
+  const handleClick = async (ordemColeta, regiaodb, idColeta, idRegiaoBloc) => {
     setCollectionOrder(ordemColeta)
-    setRegion(regiao)
+    setRegion(regiaodb)
     setIdCollection(idColeta)
+    if (idRegiaoBloc === null) {
+      setOpenDrawer(true)
+      setHasRegion(true)
+    } else {
+      handleNavigateRegion(ordemColeta, idColeta)
+    }
   }
 
   const mutationRegion = useMutation({
@@ -73,53 +79,20 @@ export default function Collects() {
         'post',
         {
           ordemColeta: collectionOrder,
-          region: region,
+          regiao: region,
           idColeta: idCollection,
         },
       ),
+    mutationKey: ['saveDataRegionOnCollection'],
+    onSuccess: async () => {
+      handleNavigateRegion(collectionOrder, idCollection)
+      toggleDrawer()
+      refetch()
+    },
   })
-  const handleSaveRegion = async () => {}
-
-  const CardReport = ({ children: report }) => {
-    const buttonType = getButtonType(report)
-
-    return (
-      <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[250px] gap-2">
-        <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
-          <TruckIcon className="w-[78px] h-[75px] text-tangaroa-100" />
-        </div>
-        <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
-          <p className="font-bold">
-            Coleta: {report.Coleta} / {report.transporte}
-          </p>
-          <p>Agenda: {dayjs(report.Agenda).format('DD/MM/YYYY HH:mm')}</p>
-          <p>Transportadora: {report.Transportadora}</p>
-          <p>Tipo Veículo: {report.Veiculo}</p>
-          <p>Placa Veículo: {report.Placa}</p>
-          <p>Motorista: {report.Motorista}</p>
-          <p>Doca: {report.Doca}</p>
-          <p>Região: {report.regiao}</p>
-          <div className="flex gap-2 my-2">
-            <Button
-              disabled={report.qtdNotas === 0}
-              onClick={() => redirectToCollectPage(report.Coleta)}
-              className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
-            >
-              Remessa
-            </Button>
-            <Button
-              disabled={report.qtdNotas > 0}
-              onClick={() =>
-                handleClick(report.Coleta, report.regiao, report.idColeta)
-              }
-              className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
-            >
-              Blocado
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
+  const handleSaveRegion = async () => {
+    setOpenDrawer(false)
+    mutationRegion.mutateAsync()
   }
 
   const handleFilter = (e) => {
@@ -178,6 +151,7 @@ export default function Collects() {
                 <p>Placa Veículo: {report.Placa}</p>
                 <p>Motorista: {report.Motorista}</p>
                 <p>Doca: {report.Doca}</p>
+                <p>Região: {report.regiao}</p>
                 <div className="flex gap-2">
                   <Button
                     disabled={report.qtdNotas === 0}
@@ -189,7 +163,12 @@ export default function Collects() {
                   <Button
                     disabled={report.qtdNotas > 0}
                     onClick={() =>
-                      handleClick(report.Coleta, report.regiao, report.idColeta)
+                      handleClick(
+                        report.Coleta,
+                        report.regiao,
+                        report.idColeta,
+                        report.idRegiaoBloc,
+                      )
                     }
                     className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
                   >
@@ -206,6 +185,7 @@ export default function Collects() {
           onOpenChange={setOpenDrawer}
           title="Deseja realizar a bipagem blocada?"
           textButtonConfirm="Confirmar"
+          handleSave={handleSaveRegion}
         ></DrawerUtils>
       </div>
     </Navbar>
