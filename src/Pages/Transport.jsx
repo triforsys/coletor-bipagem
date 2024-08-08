@@ -11,6 +11,7 @@ import BipError from '../assets/notifications/erroBip.mp3'
 import BipSuccess from '../assets/notifications/Papa-Leguas.mp3'
 import Navbar from '@/components/layout/Navbar'
 import { Card, leftSideIcons } from '@/components/layout/Card'
+import { ButtonBack } from '@/components/layout/ButtonBack'
 
 export default function Report() {
   const url = new URLSearchParams(document.location.href)
@@ -29,7 +30,6 @@ export default function Report() {
 
   const [quantityBip, setQuantityBip] = useState(0)
 
-  const goBack = () => navigate(-1)
   const goToHomepage = () => navigate('/coletas')
 
   const handleReleaseReading = () => {
@@ -136,14 +136,7 @@ export default function Report() {
       <div className="flex justify-center gap-2 mt-4 font-poppins">
         <div className="flex flex-wrap justify-center xl:justify-normal p-4 gap-4">
           <div className="w-full flex justify-center relative mb-4 items-center">
-            <div className="left-0 absolute">
-              <Button
-                onClick={goBack}
-                className="bg-tangaroa-400 hover:bg-tangaroa-300 h-10 w-14"
-              >
-                <ChevronLeftIcon />
-              </Button>
-            </div>
+            <ButtonBack />
             <div className="flex justify-center">
               <h1 className="text-xl text-neutral-500">
                 Relatório de carregamento
