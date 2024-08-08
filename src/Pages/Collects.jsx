@@ -12,6 +12,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import Navbar from '@/components/layout/Navbar'
 import DrawerUtils from '@/components/utils/Drawer'
 import dayjs from 'dayjs'
+import { Card, leftSideIcons } from '@/components/layout/Card'
+import { CardSkeleton } from '@/components/layout/CardSkeleton'
 
 export default function Collects() {
   const navigate = useNavigate()
@@ -97,7 +99,6 @@ export default function Collects() {
           <p>Motorista: {report.Motorista}</p>
           <p>Doca: {report.Doca}</p>
           <p>Região: {report.regiao}</p>
-          {/* {buttonType === 'released' ? ( */}
           <div className="flex gap-2 my-2">
             <Button
               disabled={report.qtdNotas === 0}
@@ -115,38 +116,6 @@ export default function Collects() {
             >
               Blocado
             </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const CardSkeleton = () => {
-    return (
-      <div className="flex rounded-2xl card-shadow min-w-[370px] sm:w-96 h-[250px] gap-2">
-        <div className="flex rounded-l-2xl justify-center w-[128px] flex-col items-center gap-2 bg-tangaroa-500">
-          <TruckIcon className="w-[78px] h-[75px] text-tangaroa-100" />
-        </div>
-        <div className="flex flex-col justify-between py-2 pl-2 text-[15px]">
-          <Skeleton className="h-5 w-[220px]" />
-          <Skeleton className="h-4 w-[220px]" />
-          <Skeleton className="h-4 w-[220px]" />
-          <Skeleton className="h-4 w-[220px]" />
-          <Skeleton className="h-4 w-[220px]" />
-          <Skeleton className="h-4 w-[220px]" />
-          <div className="flex gap-2">
-            <Skeleton>
-              <Button
-                disabled
-                className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
-              />
-            </Skeleton>
-            <Skeleton>
-              <Button
-                disabled
-                className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
-              />
-            </Skeleton>
           </div>
         </div>
       </div>
@@ -195,7 +164,39 @@ export default function Collects() {
             </div>
           ) : (
             data.map((report, index) => (
-              <CardReport key={report.Coleta + index}>{report}</CardReport>
+              <Card
+                key={report.Coleta + index}
+                leftSideIcon={leftSideIcons('truck')}
+                classNameCard="h-[250px] sm:w-96"
+              >
+                <p className="font-bold">
+                  Coleta: {report.Coleta} / {report.transporte}
+                </p>
+                <p>Agenda: {dayjs(report.Agenda).format('DD/MM/YYYY HH:mm')}</p>
+                <p>Transportadora: {report.Transportadora}</p>
+                <p>Tipo Veículo: {report.Veiculo}</p>
+                <p>Placa Veículo: {report.Placa}</p>
+                <p>Motorista: {report.Motorista}</p>
+                <p>Doca: {report.Doca}</p>
+                <div className="flex gap-2">
+                  <Button
+                    disabled={report.qtdNotas === 0}
+                    onClick={() => redirectToCollectPage(report.Coleta)}
+                    className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
+                  >
+                    Remessa
+                  </Button>
+                  <Button
+                    disabled={report.qtdNotas > 0}
+                    onClick={() =>
+                      handleClick(report.Coleta, report.regiao, report.idColeta)
+                    }
+                    className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
+                  >
+                    Blocado
+                  </Button>
+                </div>
+              </Card>
             ))
           )}
         </div>
