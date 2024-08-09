@@ -7,6 +7,21 @@ import { useNavigate, useParams } from 'react-router-dom'
 export default function Region() {
   const navigate = useNavigate()
   const { ordemColeta, idColeta } = useParams()
+
+  const { data, isLoading, isFetched, refetch } = useQuery({
+    queryKey: ['list'],
+    queryFn: async () => {
+      const query = await useLoadingToFetch(
+        'Buscando dados...',
+        '/bipagem/coletas',
+        'post',
+        { coleta: coletaRef.current.value },
+      )
+      return query
+    },
+    initialData: [],
+  })
+
   return (
     <>
       <Navbar>
