@@ -42,11 +42,6 @@ export default function Collects() {
   })
 
   const redirectToCollectPage = (collect) => navigate(`/coleta/${collect}`)
-  const redirectToTransportPage = (report) => {
-    navigate(
-      `/transporte/?tranporte&id=${report.Coleta}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
-    )
-  }
 
   const handleNavigateRegion = async (collectionOrder, idCollection) => {
     navigate(`/regiao/${collectionOrder}/${idCollection}`)
