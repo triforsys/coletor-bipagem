@@ -1,47 +1,98 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { TruckIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { api } from '@/lib/api'
+import { useLoadingToFetch } from '@/hook/useLoadingToFetch'
 import { Input } from '@/components/ui/input'
 import Toggle from '@/components/utils/Toggle'
 import { Skeleton } from '@/components/ui/skeleton'
 import Navbar from '@/components/layout/Navbar'
+import DrawerUtils from '@/components/utils/Drawer'
+import dayjs from 'dayjs'
 import { Card, leftSideIcons } from '@/components/layout/Card'
 import { CardSkeleton } from '@/components/layout/CardSkeleton'
+import { toast } from 'sonner'
 
 export default function Collects() {
   const navigate = useNavigate()
 
   const coletaRef = useRef()
 
+  const [openDrawer, setOpenDrawer] = useState(false)
+  const [collectionOrder, setCollectionOrder] = useState('')
+  const [region, setRegion] = useState('')
+  const [idCollection, setIdCollection] = useState('')
+  const [hasRegion, setHasRegion] = useState(false)
+
   const { data, isLoading, isFetched, refetch } = useQuery({
     queryKey: ['list'],
     queryFn: async () => {
-      const query = await api
-        .post('/bipagem/coletas', { coleta: coletaRef.current.value })
-        .then((response) => response.data)
+      const query = await useLoadingToFetch(
+        'Buscando dados...',
+        '/bipagem/coletas',
+        'post',
+        { coleta: coletaRef.current.value },
+      )
       return query
     },
     initialData: [],
   })
 
-  // const reportListFiltered = data.filter(
-  //   (report) => report.statusColeta !== 'acionada',
-  // )
-
   const redirectToCollectPage = (collect) => navigate(`/coleta/${collect}`)
-  const redirectToTransportPage = (report) =>
+  const redirectToTransportPage = (report) => {
     navigate(
       `/transporte/?tranporte&id=${report.Coleta}&campanha=${String(report.campaign).replaceAll('&', '%26')}&regiao=${report.region}&peso=${report.weight}&m3=${report.m3}&caixas=${report.boxes}`,
     )
+  }
 
-  const getButtonType = (report) => {
-    // if (report.readVolumes > 0) return 'progress' // TODO: GET QTD VOLUMES
-    if (report.invoiced) return 'released'
-    // TODO: check finished status
+  const handleNavigateRegion = async (collectionOrder, idCollection) => {
+    navigate(`/regiao/${collectionOrder}/${idCollection}`)
+  }
+  const toggleDrawer = async () => {
+    setOpenDrawer(false)
+    setCollectionOrder('')
+    setRegion('')
+    setIdCollection('')
+    setHasRegion(false)
+  }
+
+  const handleClick = async (ordemColeta, regiaodb, idColeta, idRegiaoBloc) => {
+    setCollectionOrder(ordemColeta)
+    setRegion(regiaodb)
+    setIdCollection(idColeta)
+    if (idRegiaoBloc === null) {
+      setOpenDrawer(true)
+      setHasRegion(true)
+    } else {
+      handleNavigateRegion(ordemColeta, idColeta)
+    }
+  }
+
+  const mutationRegion = useMutation({
+    mutationFn: async () =>
+      useLoadingToFetch(
+        'Inserindo dados da região.',
+        '/bipagem/set/regiao/blocado',
+        'post',
+        {
+          ordemColeta: collectionOrder,
+          regiao: region,
+          idColeta: idCollection,
+        },
+      ),
+    mutationKey: ['saveDataRegionOnCollection'],
+    onSuccess: async () => {
+      handleNavigateRegion(collectionOrder, idCollection)
+      toggleDrawer()
+      refetch()
+    },
+  })
+  const handleSaveRegion = async () => {
+    setOpenDrawer(false)
+    mutationRegion.mutateAsync()
   }
 
   const handleFilter = (e) => {
@@ -91,25 +142,34 @@ export default function Collects() {
                 leftSideIcon={leftSideIcons('truck')}
                 classNameCard="h-[250px] sm:w-96"
               >
-                <p className="font-bold">Coleta: {report.Coleta}</p>
-                <p>Agenda: {new Date(report.Agenda).toLocaleString()}</p>
+                <p className="font-bold">
+                  Coleta: {report.Coleta} / {report.transporte}
+                </p>
+                <p>Agenda: {dayjs(report.Agenda).format('DD/MM/YYYY HH:mm')}</p>
                 <p>Transportadora: {report.Transportadora}</p>
                 <p>Tipo Veículo: {report.Veiculo}</p>
                 <p>Placa Veículo: {report.Placa}</p>
                 <p>Motorista: {report.Motorista}</p>
                 <p>Doca: {report.Doca}</p>
-                {/* {buttonType === 'released' ? ( */}
+                <p>Região: {report.regiao}</p>
                 <div className="flex gap-2">
                   <Button
-                    // disabled={!report.transportList.length}
+                    disabled={report.qtdNotas === 0}
                     onClick={() => redirectToCollectPage(report.Coleta)}
                     className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
                   >
                     Remessa
                   </Button>
                   <Button
-                    disabled
-                    onClick={() => redirectToTransportPage(report)}
+                    disabled={report.qtdNotas > 0}
+                    onClick={() =>
+                      handleClick(
+                        report.Coleta,
+                        report.regiao,
+                        report.idColeta,
+                        report.idRegiaoBloc,
+                      )
+                    }
                     className="size-24 h-10 bg-tangaroa-500 hover:bg-tangaroa-400"
                   >
                     Blocado
@@ -119,6 +179,14 @@ export default function Collects() {
             ))
           )}
         </div>
+        <DrawerUtils
+          drawerOpen={openDrawer}
+          drawerClose={() => setOpenDrawer(!openDrawer)}
+          onOpenChange={setOpenDrawer}
+          title="Deseja realizar a bipagem blocada?"
+          textButtonConfirm="Confirmar"
+          handleSave={handleSaveRegion}
+        ></DrawerUtils>
       </div>
     </Navbar>
   )

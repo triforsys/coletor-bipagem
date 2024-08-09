@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import React, { useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { BoxIcon, ChevronLeftIcon } from 'lucide-react'
 
 import { api } from '@/lib/api'
 import { Input } from '@/components/ui/input'
