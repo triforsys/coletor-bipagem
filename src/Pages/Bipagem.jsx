@@ -17,6 +17,7 @@ export default function Bipagem() {
   const [searchParams] = useSearchParams()
 
   const blocado = searchParams.get('blocado')
+  const idColeta = searchParams.get('idColeta')
 
   const navigate = useNavigate()
 
