@@ -3,10 +3,9 @@ import NotFound from '../Pages/NotFound'
 import Login from '../Pages/Login'
 import Collects from '@/Pages/Collects'
 import { PrivateRoute } from './privateRoutes'
-import Transport from '@/Pages/Transport'
 import Collect from '@/Pages/Collect'
-import BipBlocked from '@/Pages/BipBlocked'
 import CollectBlocked from '@/Pages/CollectBlocked'
+import Bipagem from '@/Pages/Bipagem'
 
 export default function Rotas() {
   return (
@@ -30,18 +29,10 @@ export default function Rotas() {
           }
         />
         <Route
-          path="/transporte"
+          path="/bipagem/:id"
           element={
             <PrivateRoute>
-              <Transport />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/transporte/blocado"
-          element={
-            <PrivateRoute>
-              <BipBlocked />
+              <Bipagem />
             </PrivateRoute>
           }
         />
