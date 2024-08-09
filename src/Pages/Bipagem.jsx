@@ -1,8 +1,7 @@
 import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
-import { ChevronLeftIcon } from 'lucide-react'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { api } from '@/lib/api'
 import { Input } from '@/components/ui/input'
@@ -14,8 +13,10 @@ import { Card, leftSideIcons } from '@/components/layout/Card'
 import { ButtonBack } from '@/components/layout/ButtonBack'
 
 export default function Bipagem() {
-  const searchParams = useSearchParams()
   const params = useParams()
+  const [searchParams] = useSearchParams()
+
+  const blocado = searchParams.get('blocado')
 
   const navigate = useNavigate()
 
