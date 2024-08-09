@@ -1,6 +1,9 @@
 import { ButtonBack } from '@/components/layout/ButtonBack'
-import { Card } from '@/components/layout/Card'
+import { Card, leftSideIcons } from '@/components/layout/Card'
 import Navbar from '@/components/layout/Navbar'
+import { Button } from '@/components/ui/button'
+import { useLoadingToFetch } from '@/hook/useLoadingToFetch'
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -9,16 +12,13 @@ export default function Region() {
   const { ordemColeta, idColeta } = useParams()
 
   const { data, isLoading, isFetched, refetch } = useQuery({
-    queryKey: ['list'],
-    queryFn: async () => {
-      const query = await useLoadingToFetch(
+    queryKey: ['list', ordemColeta, idColeta],
+    queryFn: async () =>
+      await useLoadingToFetch(
         'Buscando dados...',
-        '/bipagem/coletas',
-        'post',
-        { coleta: coletaRef.current.value },
-      )
-      return query
-    },
+        `/bipagem/lista/regiao/${ordemColeta}/${idColeta}`,
+        'get',
+      ),
     initialData: [],
   })
 
@@ -35,7 +35,11 @@ export default function Region() {
                 </h1>
               </div>
             </div>
-            <Card></Card>
+            {data.map((item) => (
+              <Card leftSideIcon={leftSideIcons('box')} leftSideChildren={<Button></Button>} key={item.idRegiaoBloc} classNameCard="h-[130px]">
+                <p className="font-bold">Região: {item.regiao}</p>
+              </Card>
+            ))}
           </div>
         </div>
       </Navbar>
