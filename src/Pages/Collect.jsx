@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import Navbar from '@/components/layout/Navbar'
 import { Card, leftSideIcons } from '@/components/layout/Card'
 import { ButtonBack } from '@/components/layout/ButtonBack'
+import { useLoadingToFetch } from '@/hook/useLoadingToFetch'
 
 export default function Collect() {
   const navigate = useNavigate()
@@ -18,9 +19,11 @@ export default function Collect() {
   const { data, isFetched } = useQuery({
     queryKey: ['list'],
     queryFn: async () => {
-      const query = await api
-        .get(`/bipagem/transportes/${collectId}`)
-        .then((response) => response.data)
+      const query = await useLoadingToFetch(
+        'Buscando dados...',
+        `/bipagem/transportes/${collectId}`,
+        'get',
+      )
       setList(query)
       return query
     },
@@ -29,10 +32,7 @@ export default function Collect() {
 
   const [list, setList] = useState([])
 
-  const redirectToTransportPage = (report) =>
-    navigate(
-      `/transporte/?tranporte&id=${report.Transporte}&campanha=${String(report.Campanha).replaceAll('&', '%26')}&regiao=${report.Regiao}&peso=${report.Peso}&m3=${report.M3}&caixas=${report.TotalCaixas}`,
-    )
+  const nextPage = (report) => navigate(`/bipagem/${report.Transporte}`)
 
   const transportRef = useRef()
 
@@ -53,7 +53,7 @@ export default function Collect() {
     <Navbar>
       <div className="flex justify-center gap-2 mt-4 font-poppins">
         <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
-          <div className="w-[370px] md:w-full">
+          <div className="w-[370px] sm:w-full">
             <div className="w-full flex justify-center relative mb-6 items-center">
               <ButtonBack />
               <div className="flex justify-center">
@@ -94,12 +94,11 @@ export default function Collect() {
             list.map((report) => (
               <Card
                 key={report.Transporte}
-                classNameCard="sm:w-[250px]"
                 leftSideIcon={leftSideIcons('box')}
                 leftSideChildren={
                   <Button
                     className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
-                    onClick={() => redirectToTransportPage(report)}
+                    onClick={() => nextPage(report)}
                   >
                     Iniciar
                   </Button>

@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { api } from '@/lib/api'
@@ -16,6 +16,8 @@ export default function Bipagem() {
   const params = useParams()
   const [searchParams] = useSearchParams()
 
+  const ordemColeta = params.id
+  const regiao = searchParams.get('regiao')
   const blocado = searchParams.get('blocado')
   const idColeta = searchParams.get('idColeta')
 
@@ -75,6 +77,19 @@ export default function Bipagem() {
     toast.error(msg || 'Erro ao validar código de barras.')
     await playAudio(false)
   }
+
+  const { data } = useQuery({
+    queryKey: ['info', idColeta],
+    queryFn: async () => {
+      if (blocado)
+        return await api
+          .get(`/bipagem/blocado/${ordemColeta}/${idColeta}/${regiao}`)
+          .then((response) => response.data)
+      return await api
+        .get(`/bipagem/remessa/${ordemColeta}`)
+        .then((response) => response.data)
+    },
+  })
 
   const barcodeMutation = useMutation({
     mutationFn: async () => {
@@ -140,23 +155,23 @@ export default function Bipagem() {
             </div>
           </div>
           <Card leftSideIcon={leftSideIcons('box')}>
-            <p className="font-bold">Transporte: {Number(params.id)}</p>
+            <p className="font-bold">Transporte: {data?.Transporte}</p>
             <p className="text-ellipsis overflow-hidden">
-              Campanha: {params.campanha}
+              Campanha: {data?.Campanha}
             </p>
             <p className="text-ellipsis overflow-hidden">
-              Região: {params.regiao}
+              Região: {data?.Regiao}
             </p>
             <div className="flex gap-3">
               <p className="text-ellipsis overflow-hidden">
-                Peso: {params.peso}
+                Peso: {data?.Peso}
               </p>
-              <p className="text-ellipsis overflow-hidden">M3: {params.m3}</p>
+              <p className="text-ellipsis overflow-hidden">M3: {data?.M3}</p>
             </div>
-            <p>Caixas: {params.caixas}</p>
+            <p>Caixas: {data?.TotalCaixas}</p>
           </Card>
           <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
-            {quantityBip}
+            {data?.qtdLida}
           </div>
           <Input
             ref={barcodeRef}
