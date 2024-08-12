@@ -161,12 +161,12 @@ export default function Bipagem() {
             </div>
           </div>
           <Card leftSideIcon={leftSideIcons('box')}>
-            <p className="font-bold">Transporte: {data?.Transporte}</p>
+            <p className="font-bold">Transporte: {blocado ? data?.ordemColeta : data?.Transporte}</p>
             <p className="text-ellipsis overflow-hidden">
               Campanha: {data?.Campanha}
             </p>
             <p className="text-ellipsis overflow-hidden">
-              Região: {data?.Regiao}
+              Região: {blocado ? data?.regiao : data?.Regiao}
             </p>
             <div className="flex gap-3">
               <p className="text-ellipsis overflow-hidden">
@@ -177,7 +177,7 @@ export default function Bipagem() {
             <p>Caixas: {data?.TotalCaixas}</p>
           </Card>
           <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
-            {data?.qtdLida}
+            {data && Number(data?.qtdLida)}
           </div>
           <Input
             ref={barcodeRef}
