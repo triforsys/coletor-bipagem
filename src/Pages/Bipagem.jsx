@@ -11,6 +11,7 @@ import BipSuccess from '../assets/notifications/Papa-Leguas.mp3'
 import Navbar from '@/components/layout/Navbar'
 import { Card, leftSideIcons } from '@/components/layout/Card'
 import { ButtonBack } from '@/components/layout/ButtonBack'
+import { useLoadingToFetch } from '@/hook/useLoadingToFetch'
 
 export default function Bipagem() {
   const params = useParams()
@@ -82,12 +83,17 @@ export default function Bipagem() {
     queryKey: ['info', idColeta],
     queryFn: async () => {
       if (blocado)
-        return await api
-          .get(`/bipagem/blocado/${ordemColeta}/${idColeta}/${regiao}`)
-          .then((response) => response.data)
-      return await api
-        .get(`/bipagem/remessa/${ordemColeta}`)
-        .then((response) => response.data)
+        return await useLoadingToFetch(
+          'Buscando dados...',
+          `/bipagem/blocado/${ordemColeta}/${idColeta}/${regiao}`,
+          'get',
+        )
+
+      return await useLoadingToFetch(
+        'Buscando dados...',
+        `/bipagem/remessa/${ordemColeta}`,
+        'get',
+      )
     },
   })
 
