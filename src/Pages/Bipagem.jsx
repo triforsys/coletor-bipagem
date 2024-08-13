@@ -211,13 +211,13 @@ export default function Bipagem() {
             </div>
             <p>Caixas: {data?.TotalCaixas}</p>
           </Card>
-          <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
+          <div className="border border-tangaroa-300 bg-white rounded-md w-full h-10 text-center justify-center flex flex-col">
             {data && Number(data?.qtdLida)}
           </div>
           <Input
             ref={barcodeRef}
             onChange={barcodeMutation.mutate}
-            className="text my-10 h-16"
+            className="text my-10 h-16 bg-white"
             placeholder="Código de barras"
           />
           <div className="w-full text-center flex justify-center border-t-[1px] border-t-black pt-2">
