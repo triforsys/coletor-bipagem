@@ -4,6 +4,7 @@ import Navbar from '@/components/layout/Navbar'
 import { Button } from '@/components/ui/button'
 import { useLoadingToFetch } from '@/hook/useLoadingToFetch'
 import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -51,16 +52,20 @@ export default function Region() {
                 </Button>
               }
               key={item.idRegiaoBloc}
-              classNameCard="h-[140px]"
+              classNameCard="h-[130px]"
             >
               <p className="font-bold">Região: {item.regiao}</p>
-              <p className="overflow-hidden">
-                Data inicialização: {item.DataInicializacao}
+              <p>
+                Inicialização:{' '}
+                {item.DataInicializacao &&
+                  dayjs(item.DataInicializacao).format('DD/MM/YYYY HH:mm')}
               </p>
-              <p className="overflow-hidden">
-                Data finalização: {item.DataFinalizacao}
+              <p>
+                Finalização:{' '}
+                {item.DataFinalizacao &&
+                  dayjs(item.DataFinalizacao).format('DD/MM/YYYY HH:mm')}
               </p>
-              <p className="overflow-hidden">Status: {item.statusRegiaoBloc}</p>
+              <p></p>
             </Card>
           ))}
         </div>

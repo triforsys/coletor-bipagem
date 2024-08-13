@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { api } from '@/lib/api'
@@ -26,8 +26,6 @@ export default function Bipagem() {
 
   const barcodeRef = useRef()
   const releaseReadingRef = useRef()
-
-  const [quantityBip, setQuantityBip] = useState(0)
 
   const goToHomepage = () => navigate('/coletas')
 
@@ -57,8 +55,11 @@ export default function Bipagem() {
     }
   }
 
-  const handleFinish = () => {
-    if (confirm('Deseja realmente FINALIZAR?')) goToHomepage()
+  const handleFinish = async () => {
+    if (confirm('Deseja realmente FINALIZAR?')) {
+      if (blocado) finishMutation.mutate()
+      else goToHomepage()
+    }
   }
 
   const handleExit = () => {
@@ -78,6 +79,8 @@ export default function Bipagem() {
     toast.error(msg || 'Erro ao validar código de barras.')
     await playAudio(false)
   }
+
+  const queryClient = useQueryClient()
 
   const { data } = useQuery({
     queryKey: ['info', idColeta],
@@ -105,31 +108,61 @@ export default function Bipagem() {
       barcodeInput.disabled = true
 
       try {
-        const result = await api.post('/bipagem/codigoDeBarras', {
-          transporte: params.id,
-          codigoDeBarras: barcodeInput.value,
-        })
-
+        let result
+        if (blocado)
+          result = await api.post('/bipagem/blocado/codigo', {
+            regiao,
+            idColeta,
+            ordemColeta: params.id,
+            codigo: barcodeInput.value,
+          })
+        else
+          result = await api.post('/bipagem/codigoDeBarras', {
+            transporte: params.id,
+            codigoDeBarras: barcodeInput.value,
+          })
         if (result.data === true) {
-          toast.success('Código de barras validado com sucesso!')
-          setQuantityBip(quantityBip + 1)
+          if (blocado) toast.success('Bipagem realizada com sucesso!')
+          else toast.success('Código de barras validado com sucesso!')
+
           await playAudio(true)
           barcodeInput.disabled = false
         } else if (result.status === 200) {
           toast.warning(result.data.msg)
           await playAudio(true)
         }
-
         barcodeInput.value = ''
       } catch (error) {
         if (error.response && error.response.data.msg)
           await bipError(error.response.data.msg)
         else await bipError()
-
         releaseReadingRef.current.disabled = false
       }
     },
+    onSuccess: () => {
+      queryClient.setQueryData(['info', idColeta], (prev) => ({
+        ...prev,
+        qtdLida: prev.qtdLida + 1,
+      }))
+    },
     mutationKey: ['barcode'],
+  })
+
+  const finishMutation = useMutation({
+    mutationFn: async () => {
+      try {
+        await api.post('/bipagem/blocado/finalizar', {
+          regiao,
+          idColeta,
+          ordemColeta: params.id,
+        })
+
+        goToHomepage()
+      } catch (error) {
+        toast.error('Erro ao finalizar bipagem')
+      }
+    },
+    mutationKey: ['finish'],
   })
 
   const motivateMutation = useMutation({
@@ -161,7 +194,9 @@ export default function Bipagem() {
             </div>
           </div>
           <Card leftSideIcon={leftSideIcons('box')}>
-            <p className="font-bold">Transporte: {blocado ? data?.ordemColeta : data?.Transporte}</p>
+            <p className="font-bold">
+              Transporte: {blocado ? data?.ordemColeta : data?.Transporte}
+            </p>
             <p className="text-ellipsis overflow-hidden">
               Campanha: {data?.Campanha}
             </p>
