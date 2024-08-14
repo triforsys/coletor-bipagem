@@ -52,7 +52,7 @@ export default function Region() {
                 </Button>
               }
               key={item.idRegiaoBloc}
-              classNameCard="h-[130px]"
+              classNameCard="h-[135px]"
             >
               <p className="font-bold">Região: {item.regiao}</p>
               <p>

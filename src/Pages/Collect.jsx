@@ -32,7 +32,7 @@ export default function Collect() {
 
   const [list, setList] = useState([])
 
-  const nextPage = (report) => navigate(`/bipagem/${report.Transporte}`)
+  const nextPage = (report) => navigate(`/bipagem/${report.Transporte}?idColeta=${report.idColeta}`)
 
   const transportRef = useRef()
 

@@ -56,10 +56,7 @@ export default function Bipagem() {
   }
 
   const handleFinish = async () => {
-    if (confirm('Deseja realmente FINALIZAR?')) {
-      if (blocado) finishMutation.mutate()
-      else goToHomepage()
-    }
+    if (confirm('Deseja realmente FINALIZAR?')) finishMutation.mutate()
   }
 
   const handleExit = () => {
@@ -151,11 +148,16 @@ export default function Bipagem() {
   const finishMutation = useMutation({
     mutationFn: async () => {
       try {
-        await api.post('/bipagem/blocado/finalizar', {
-          regiao,
-          idColeta,
-          ordemColeta: params.id,
-        })
+        if (blocado)
+          await api.post('/bipagem/blocado/finalizar', {
+            regiao,
+            idColeta,
+            ordemColeta: params.id,
+          })
+        else
+          await api.post('/bipagem/finalizar', {
+            idColeta,
+          })
 
         goToHomepage()
       } catch (error) {
