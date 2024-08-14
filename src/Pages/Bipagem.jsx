@@ -1,8 +1,7 @@
 import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
-import { ChevronLeftIcon } from 'lucide-react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { api } from '@/lib/api'
 import { Input } from '@/components/ui/input'
@@ -12,23 +11,21 @@ import BipSuccess from '../assets/notifications/Papa-Leguas.mp3'
 import Navbar from '@/components/layout/Navbar'
 import { Card, leftSideIcons } from '@/components/layout/Card'
 import { ButtonBack } from '@/components/layout/ButtonBack'
+import { useLoadingToFetch } from '@/hook/useLoadingToFetch'
 
-export default function Report() {
-  const url = new URLSearchParams(document.location.href)
-  const params = {}
-  const getParam = (key) => {
-    params[key] = url.get(key)
-  }
+export default function Bipagem() {
+  const params = useParams()
+  const [searchParams] = useSearchParams()
 
-  const urlKeys = ['id', 'campanha', 'regiao', 'peso', 'm3', 'caixas']
-  urlKeys.map(getParam)
+  const ordemColeta = params.id
+  const regiao = searchParams.get('regiao')
+  const blocado = searchParams.get('blocado')
+  const idColeta = searchParams.get('idColeta')
 
   const navigate = useNavigate()
 
   const barcodeRef = useRef()
   const releaseReadingRef = useRef()
-
-  const [quantityBip, setQuantityBip] = useState(0)
 
   const goToHomepage = () => navigate('/coletas')
 
@@ -58,8 +55,8 @@ export default function Report() {
     }
   }
 
-  const handleFinish = () => {
-    if (confirm('Deseja realmente FINALIZAR?')) goToHomepage()
+  const handleFinish = async () => {
+    if (confirm('Deseja realmente FINALIZAR?')) finishMutation.mutate()
   }
 
   const handleExit = () => {
@@ -80,6 +77,26 @@ export default function Report() {
     await playAudio(false)
   }
 
+  const queryClient = useQueryClient()
+
+  const { data } = useQuery({
+    queryKey: ['info', idColeta],
+    queryFn: async () => {
+      if (blocado)
+        return await useLoadingToFetch(
+          'Buscando dados...',
+          `/bipagem/blocado/${ordemColeta}/${idColeta}/${regiao}`,
+          'get',
+        )
+
+      return await useLoadingToFetch(
+        'Buscando dados...',
+        `/bipagem/remessa/${ordemColeta}`,
+        'get',
+      )
+    },
+  })
+
   const barcodeMutation = useMutation({
     mutationFn: async () => {
       const barcodeInput = barcodeRef.current
@@ -88,31 +105,66 @@ export default function Report() {
       barcodeInput.disabled = true
 
       try {
-        const result = await api.post('/bipagem/codigoDeBarras', {
-          transporte: params.id,
-          codigoDeBarras: barcodeInput.value,
-        })
-
+        let result
+        if (blocado)
+          result = await api.post('/bipagem/blocado/codigo', {
+            regiao,
+            idColeta,
+            ordemColeta: params.id,
+            codigo: barcodeInput.value,
+          })
+        else
+          result = await api.post('/bipagem/codigoDeBarras', {
+            transporte: params.id,
+            codigoDeBarras: barcodeInput.value,
+          })
         if (result.data === true) {
-          toast.success('Código de barras validado com sucesso!')
-          setQuantityBip(quantityBip + 1)
+          if (blocado) toast.success('Bipagem realizada com sucesso!')
+          else toast.success('Código de barras validado com sucesso!')
+
           await playAudio(true)
           barcodeInput.disabled = false
         } else if (result.status === 200) {
           toast.warning(result.data.msg)
           await playAudio(true)
         }
-
         barcodeInput.value = ''
       } catch (error) {
         if (error.response && error.response.data.msg)
           await bipError(error.response.data.msg)
         else await bipError()
-
         releaseReadingRef.current.disabled = false
       }
     },
+    onSuccess: () => {
+      queryClient.setQueryData(['info', idColeta], (prev) => ({
+        ...prev,
+        qtdLida: prev.qtdLida + 1,
+      }))
+    },
     mutationKey: ['barcode'],
+  })
+
+  const finishMutation = useMutation({
+    mutationFn: async () => {
+      try {
+        if (blocado)
+          await api.post('/bipagem/blocado/finalizar', {
+            regiao,
+            idColeta,
+            ordemColeta: params.id,
+          })
+        else
+          await api.post('/bipagem/finalizar', {
+            idColeta,
+          })
+
+        goToHomepage()
+      } catch (error) {
+        toast.error('Erro ao finalizar bipagem')
+      }
+    },
+    mutationKey: ['finish'],
   })
 
   const motivateMutation = useMutation({
@@ -144,28 +196,30 @@ export default function Report() {
             </div>
           </div>
           <Card leftSideIcon={leftSideIcons('box')}>
-            <p className="font-bold">Transporte: {Number(params.id)}</p>
-            <p className="text-ellipsis overflow-hidden">
-              Campanha: {params.campanha}
+            <p className="font-bold">
+              Transporte: {blocado ? data?.ordemColeta : data?.Transporte}
             </p>
             <p className="text-ellipsis overflow-hidden">
-              Região: {params.regiao}
+              Campanha: {data?.Campanha}
+            </p>
+            <p className="text-ellipsis overflow-hidden">
+              Região: {blocado ? data?.regiao : data?.Regiao}
             </p>
             <div className="flex gap-3">
               <p className="text-ellipsis overflow-hidden">
-                Peso: {params.peso}
+                Peso: {data?.Peso}
               </p>
-              <p className="text-ellipsis overflow-hidden">M3: {params.m3}</p>
+              <p className="text-ellipsis overflow-hidden">M3: {data?.M3}</p>
             </div>
-            <p>Caixas: {params.caixas}</p>
+            <p>Caixas: {data?.TotalCaixas}</p>
           </Card>
-          <div className="border border-tangaroa-300 rounded-md w-full h-10 text-center justify-center flex flex-col">
-            {quantityBip}
+          <div className="border border-tangaroa-300 bg-white rounded-md w-full h-10 text-center justify-center flex flex-col">
+            {data && Number(data?.qtdLida)}
           </div>
           <Input
             ref={barcodeRef}
             onChange={barcodeMutation.mutate}
-            className="text my-10 h-16"
+            className="text my-10 h-16 bg-white"
             placeholder="Código de barras"
           />
           <div className="w-full text-center flex justify-center border-t-[1px] border-t-black pt-2">
