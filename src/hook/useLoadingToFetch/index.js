@@ -17,16 +17,8 @@ export async function useLoadingToFetch(
   type,
   data = null,
 ) {
-  const loadingToast = toast.loading(msgLoading, {
-    unstyled: false,
-    classNames: {
-      toast: 'bg-zinc-50 border border-zinc-700',
-      title: '', // ! editar a cor do texto pra um edita pra todos os tipo
-      // cancelButton: 'hover:border-zinc-900',
-      // closeButton:
-      //   'bg-zinc-50 text-zinc-900 border border-zinc-700 hover:border-zinc-900',
-    },
-  })
+  const loadingToast = toast.loading(msgLoading)
+
   try {
     let response = null
     if (type === 'post') response = await api[type](url, data)
