@@ -19,7 +19,7 @@ export default function Navbar({ children }) {
           </Button>
         </div>
       </div>
-      <div className="p-5 bg-slate-50 ">{children}</div>
+      <div className="p-4 bg-slate-50 overflow-hidden">{children}</div>
     </>
   )
 }

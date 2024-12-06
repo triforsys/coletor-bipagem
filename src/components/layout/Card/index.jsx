@@ -9,7 +9,7 @@ export const Card = ({
   classNameContent,
 }) => (
   <div
-    className={`flex rounded-2xl card-shadow min-w-[370px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2 ${classNameCard}`}
+    className={`flex rounded-2xl card-shadow min-w-[350px] w-full text-ellipsis overflow-hidden pr-1 h-[180px] gap-2 ${classNameCard}`}
   >
     <LeftSide icon={leftSideIcon} children={leftSideChildren} />
     <div
