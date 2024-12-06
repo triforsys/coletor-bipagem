@@ -17,7 +17,7 @@ export default function Collect() {
   const collectId = window.location.pathname.split('/')[2]
 
   const { data, isFetched } = useQuery({
-    queryKey: ['list'],
+    queryKey: ['list-collect'],
     queryFn: async () => {
       const query = await useLoadingToFetch(
         'Buscando dados...',
