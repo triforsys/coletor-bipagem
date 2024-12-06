@@ -37,50 +37,55 @@ export default function Summary() {
               <ButtonBack />
               <div className="flex justify-center">
                 <h1 className="text-2xl text-neutral-500">
-                  Resumo: {collectId} / {transportId}
+                  Resumo: <br className='sm:hidden'></br>{collectId} / {transportId}
                 </h1>
               </div>
             </div>
           </div>
 
-          <div>
-            Total de Volumes Lidos: {data.length ? data.reduce((acc, item) => acc + item.Volumes, 0) : ''}
+          <div className='w-full'>
+            Total de Volumes Lidos:{' '}
+            {data.length
+              ? data.reduce((acc, item) => acc + item.Volumes, 0)
+              : ''}
           </div>
 
-          <Table className="card-shadow rounded-md bg-white">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Região</TableHead>
-                <TableHead>Produto</TableHead>
-                <TableHead>Volumes</TableHead>
-                <TableHead>Código de barras</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.length ? (
-                data.map((item) => (
-                  <TableRow
-                    className="odd:bg-gray-100 even:bg-white"
-                    key={item.Regiao + item.Produto}
-                  >
-                    <TableCell>{item.regiao}</TableCell>
-                    <TableCell>{item.produto}</TableCell>
-                    <TableCell>{item.Volumes}</TableCell>
-                    <TableCell>{item.codigoDeBarras}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
+          <div className='w-full overflow-auto card-shadow rounded-md bg-white'>
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell
-                    colSpan="4"
-                    className="h-24 text-center rounded-md bg-gray-100"
-                  >
-                    {isFetched && <>Sem resultados.</>}
-                  </TableCell>
+                  <TableHead>Região</TableHead>
+                  <TableHead>Produto</TableHead>
+                  <TableHead>Volumes</TableHead>
+                  <TableHead>Código de barras</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data.length ? (
+                  data.map((item) => (
+                    <TableRow
+                      className="odd:bg-gray-100 even:bg-white"
+                      key={item.Regiao + item.Produto}
+                    >
+                      <TableCell>{item.regiao}</TableCell>
+                      <TableCell>{item.produto}</TableCell>
+                      <TableCell>{item.Volumes}</TableCell>
+                      <TableCell>78969862958437896986295843</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan="4"
+                      className="h-24 text-center rounded-md bg-gray-100"
+                    >
+                      {isFetched && <>Sem resultados.</>}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </Navbar>
