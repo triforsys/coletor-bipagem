@@ -190,8 +190,8 @@ export default function Bipagem() {
           <div className="w-full flex justify-center relative mb-4 items-center">
             <ButtonBack />
             <div className="flex justify-center">
-              <h1 className="text-lg sm:text-xl text-neutral-500">
-                Relatório de carregamento
+              <h1 className="text-xl text-neutral-500">
+                Relatório de coleta
               </h1>
             </div>
           </div>
