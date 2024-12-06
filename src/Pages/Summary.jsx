@@ -1,5 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import React, { useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import Navbar from '@/components/layout/Navbar'
@@ -31,33 +31,34 @@ export default function Summary() {
   return (
     <Navbar>
       <div className="flex justify-center gap-2 mt-4 font-poppins">
-        <div className="flex flex-wrap justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
-          <div className="w-[370px] sm:w-full">
+        <div className="flex flex-wrap min-w-[360px] justify-center md:justify-normal p-4 gap-4 w-full xl:max-w-screen-xl">
+          <div className="w-full">
             <div className="w-full flex justify-center relative mb-6 items-center">
               <ButtonBack />
               <div className="flex justify-center">
                 <h1 className="text-2xl text-neutral-500">
-                  Resumo: <br className='sm:hidden'></br>{collectId} / {transportId}
+                  Resumo: <br className="sm:hidden"></br>
+                  {collectId} / {transportId}
                 </h1>
               </div>
             </div>
           </div>
 
-          <div className='w-full'>
+          <div className="w-full">
             Total de Volumes Lidos:{' '}
             {data.length
               ? data.reduce((acc, item) => acc + item.Volumes, 0)
               : ''}
           </div>
 
-          <div className='w-full overflow-auto card-shadow rounded-md bg-white'>
+          <div className="w-full min-w-[360px] overflow-auto card-shadow rounded-md bg-white">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Região</TableHead>
                   <TableHead>Produto</TableHead>
                   <TableHead>Volumes</TableHead>
-                  <TableHead>Código de barras</TableHead>
+                  <TableHead>Barcode</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

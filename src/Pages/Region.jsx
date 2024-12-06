@@ -45,7 +45,7 @@ export default function Region() {
               leftSideIcon={leftSideIcons('box')}
               leftSideChildren={
                 <Button
-                  className="rounded-[10px] w-20 h-6 bg-tangaroa-400 hover:bg-tangaroa-300"
+                  className="rounded-[10px] w-20 h-6 bg-[cadetblue] hover:bg-[cadetblue] hover:opacity-90"
                   onClick={() => nextPage(item.regiao)}
                 >
                   Iniciar
