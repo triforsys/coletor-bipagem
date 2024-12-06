@@ -70,7 +70,7 @@ export default function Summary() {
                       <TableCell>{item.regiao}</TableCell>
                       <TableCell>{item.produto}</TableCell>
                       <TableCell>{item.Volumes}</TableCell>
-                      <TableCell>78969862958437896986295843</TableCell>
+                      <TableCell>{item.codigoDeBarras}</TableCell>
                     </TableRow>
                   ))
                 ) : (
