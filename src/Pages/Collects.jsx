@@ -140,7 +140,7 @@ export default function Collects() {
                 leftSideIcon={leftSideIcons('truck')}
                 leftSideChildren={
                   <Button
-                    className="rounded-[10px] whitespace-normal text-sm w-24 h-10 bg-tangaroa-400 hover:bg-tangaroa-300"
+                    className="rounded-[10px] whitespace-normal text-sm w-24 h-10 bg-[cadetblue] hover:bg-[cadetblue] hover:opacity-90"
                     onClick={() =>
                       goToSummary(report.Coleta, report.transporte)
                     }
