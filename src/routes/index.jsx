@@ -6,6 +6,7 @@ import { PrivateRoute } from './privateRoutes'
 import Bipagem from '@/Pages/Bipagem'
 import Collect from '@/Pages/Collect'
 import Region from '@/Pages/Region'
+import Summary from '@/Pages/Summary'
 
 export default function Rotas() {
   return (
@@ -17,6 +18,14 @@ export default function Rotas() {
           element={
             <PrivateRoute>
               <Collects />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/resumo/:collect/:transport"
+          element={
+            <PrivateRoute>
+              <Summary />
             </PrivateRoute>
           }
         />

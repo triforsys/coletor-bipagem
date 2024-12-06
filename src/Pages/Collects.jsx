@@ -96,6 +96,9 @@ export default function Collects() {
     if (coleta.length === 0 || coleta.length >= 5) refetch()
   }
 
+  const goToSummary = async (collect, transport) =>
+    navigate(`/resumo/${collect}/${transport}`)
+
   return (
     <Navbar>
       <div className="flex justify-center gap-2 mt-4 font-poppins">
@@ -135,6 +138,16 @@ export default function Collects() {
               <Card
                 key={report.Coleta + index}
                 leftSideIcon={leftSideIcons('truck')}
+                leftSideChildren={
+                  <Button
+                    className="rounded-[10px] whitespace-normal text-sm w-24 h-10 bg-tangaroa-400 hover:bg-tangaroa-300"
+                    onClick={() =>
+                      goToSummary(report.Coleta, report.transporte)
+                    }
+                  >
+                    Resumo Blocado
+                  </Button>
+                }
                 classNameCard="h-[250px] sm:w-96"
               >
                 <p className="font-bold">
