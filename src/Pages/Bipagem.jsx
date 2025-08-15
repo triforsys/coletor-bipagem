@@ -23,32 +23,37 @@ export default function Bipagem() {
   const idColeta = searchParams.get('idColeta')
 
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  const barcodeRef = useRef()
-  const releaseReadingRef = useRef()
+  // input controlado (sem restrição de tamanho)
+  const [barcode, setBarcode] = useState('')
+
+  const barcodeRef = useRef(null)
+  const releaseReadingRef = useRef(null)
 
   const goToHomepage = () => navigate('/coletas')
 
   const handleReleaseReading = () => {
     if (confirm('Deseja liberar a leitura?')) {
-      barcodeRef.current.disabled = false
-      releaseReadingRef.current.disabled = true
+      if (barcodeRef.current) barcodeRef.current.disabled = false
+      if (releaseReadingRef.current) releaseReadingRef.current.disabled = true
+      barcodeRef.current && barcodeRef.current.focus()
     }
   }
 
   const handleStop = async () => {
     let motivate = ''
-    motivate = prompt('Informe o motivo da parada (30 caracteres)')
+    motivate = prompt('Informe o motivo da parada (30 caracteres)') || ''
 
     if (!motivate || motivate.length < 10)
-      motivate = prompt('Motivo precisa ter pelo menos 10 caracteres')
+      motivate = prompt('Motivo precisa ter pelo menos 10 caracteres') || ''
 
     if (!motivate || motivate.length < 10) return
 
     if (confirm('Deseja realmente parar?')) {
       try {
         const result = await motivateMutation.mutateAsync(motivate.slice(0, 30))
-        if (result === true) goBack()
+        if (result === true) goToHomepage()
       } catch {
         toast.error('Erro ao adicionar motivo da parada')
       }
@@ -61,14 +66,11 @@ export default function Bipagem() {
 
   const handleExit = () => {
     const reallyExit = confirm('Deseja realmente sair?')
-
-    if (reallyExit) {
-      goToHomepage()
-    }
+    if (reallyExit) goToHomepage()
   }
 
-  const playAudio = async (type) => {
-    const audio = new Audio(type === true ? BipSuccess : BipError)
+  const playAudio = async (isSuccess) => {
+    const audio = new Audio(isSuccess ? BipSuccess : BipError)
     audio.play()
   }
 
@@ -76,8 +78,6 @@ export default function Bipagem() {
     toast.error(msg || 'Erro ao validar código de barras.')
     await playAudio(false)
   }
-
-  const queryClient = useQueryClient()
 
   const { data } = useQuery({
     queryKey: ['info', idColeta],
@@ -97,50 +97,48 @@ export default function Bipagem() {
     },
   })
 
+  // mutation agora valida apenas quando Enter for pressionado
   const barcodeMutation = useMutation({
-    mutationFn: async () => {
-      const barcodeInput = barcodeRef.current
-      if (!barcodeInput.value.length) return
-
-      barcodeInput.disabled = true
+    mutationFn: async (code) => {
+      if (!code) return
 
       try {
         let result
-        if (blocado)
+        if (blocado) {
           result = await api.post('/bipagem/blocado/codigo', {
             regiao,
             idColeta,
             ordemColeta: params.id,
-            codigo: barcodeInput.value,
+            codigo: code,
           })
-        else
+        } else {
           result = await api.post('/bipagem/codigoDeBarras', {
             transporte: params.id,
-            codigoDeBarras: barcodeInput.value,
+            codigoDeBarras: code,
           })
-        if (result.data === true) {
-          if (blocado) toast.success('Bipagem realizada com sucesso!')
-          else toast.success('Código de barras validado com sucesso!')
+        }
 
+        if (result.data === true) {
+          toast.success(blocado ? 'Bipagem realizada com sucesso!' : 'Código de barras validado com sucesso!')
           await playAudio(true)
-          barcodeInput.disabled = false
         } else if (result.status === 200) {
           toast.warning(result.data.msg)
           await playAudio(true)
         }
-        barcodeInput.value = ''
       } catch (error) {
-        if (error.response && error.response.data.msg)
-          await bipError(error.response.data.msg)
+        if (error?.response?.data?.msg) await bipError(error.response.data.msg)
         else await bipError()
-        releaseReadingRef.current.disabled = false
+        if (releaseReadingRef.current) releaseReadingRef.current.disabled = false
+      } finally {
+        setBarcode('') // limpa o campo
+        requestAnimationFrame(() => barcodeRef.current && barcodeRef.current.focus())
       }
     },
     onSuccess: () => {
-      queryClient.setQueryData(['info', idColeta], (prev) => ({
-        ...prev,
-        qtdLida: prev.qtdLida + 1,
-      }))
+      queryClient.setQueryData(['info', idColeta], (prev) => {
+        if (!prev) return prev
+        return { ...prev, qtdLida: Number(prev.qtdLida || 0) + 1 }
+      })
     },
     mutationKey: ['barcode'],
   })
@@ -160,7 +158,7 @@ export default function Bipagem() {
           })
 
         goToHomepage()
-      } catch (error) {
+      } catch {
         toast.error('Erro ao finalizar bipagem')
       }
     },
@@ -178,9 +176,8 @@ export default function Bipagem() {
   })
 
   useEffect(() => {
-    releaseReadingRef.current.disabled = true
-
-    barcodeRef.current.focus()
+    if (releaseReadingRef.current) releaseReadingRef.current.disabled = true
+    barcodeRef.current && barcodeRef.current.focus()
   }, [])
 
   return (
@@ -190,40 +187,50 @@ export default function Bipagem() {
           <div className="w-full flex justify-center relative mb-4 items-center">
             <ButtonBack />
             <div className="flex justify-center">
-              <h1 className="text-xl text-neutral-500">
-                Relatório de coleta
-              </h1>
+              <h1 className="text-xl text-neutral-500">Relatório de coleta</h1>
             </div>
           </div>
+
           <Card leftSideIcon={leftSideIcons('box')}>
             <p className="font-bold">
               Transporte: {blocado ? data?.ordemColeta : data?.Transporte}
             </p>
-            <p className="text-ellipsis overflow-hidden">
-              Campanha: {data?.Campanha}
-            </p>
+            <p className="text-ellipsis overflow-hidden">Campanha: {data?.Campanha}</p>
             <p className="text-ellipsis overflow-hidden">
               Região: {blocado ? data?.regiao : data?.Regiao}
             </p>
             <div className="flex gap-3">
-              <p className="text-ellipsis overflow-hidden">
-                Peso: {data?.Peso}
-              </p>
+              <p className="text-ellipsis overflow-hidden">Peso: {data?.Peso}</p>
               <p className="text-ellipsis overflow-hidden">M3: {data?.M3}</p>
             </div>
             <p>Caixas: {data?.TotalCaixas}</p>
           </Card>
+
           <div className="border border-tangaroa-300 bg-white rounded-md w-full h-10 text-center justify-center flex flex-col">
             {data && Number(data?.qtdLida)}
           </div>
+
+          {/* Valida apenas com Enter */}
           <Input
             ref={barcodeRef}
-            onChange={barcodeMutation.mutate}
+            value={barcode}
+            onChange={(e) => {
+              const onlyDigits = e.target.value.replace(/\D/g, '') // remove tudo que não for número
+              setBarcode(onlyDigits)
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                barcodeMutation.mutate(barcode.trim())
+              }
+            }}
+            disabled={barcodeMutation.isPending || barcodeMutation.isLoading}
             className="text my-10 h-16 bg-white"
             placeholder="Código de barras"
           />
+
           <div className="w-full text-center flex justify-center border-t-[1px] border-t-black pt-2">
-            <div className="w-full  flex flex-col lg:flex-row gap-2">
+            <div className="w-full flex flex-col lg:flex-row gap-2">
               <Button
                 className="w-full rounded-md bg-tangaroa-400 hover:bg-tangaroa-300"
                 onClick={handleReleaseReading}
