@@ -98,6 +98,15 @@ export default function Bipagem() {
   })
 
   // mutation agora valida apenas quando Enter for pressionado
+  const focusBarcode = () => {
+    // espera um tick para garantir que o disabled já virou false
+    setTimeout(() => {
+      barcodeRef.current?.focus({ preventScroll: true })
+      // opcional: selecionar o conteúdo
+      // barcodeRef.current?.select()
+    }, 0)
+  }
+
   const barcodeMutation = useMutation({
     mutationFn: async (code) => {
       if (!code) return
@@ -129,9 +138,7 @@ export default function Bipagem() {
         if (error?.response?.data?.msg) await bipError(error.response.data.msg)
         else await bipError()
         if (releaseReadingRef.current) releaseReadingRef.current.disabled = false
-      } finally {
-        setBarcode('') // limpa o campo
-        requestAnimationFrame(() => barcodeRef.current && barcodeRef.current.focus())
+        throw error // mantém o status de erro para o onSettled disparar
       }
     },
     onSuccess: () => {
@@ -139,6 +146,11 @@ export default function Bipagem() {
         if (!prev) return prev
         return { ...prev, qtdLida: Number(prev.qtdLida || 0) + 1 }
       })
+    },
+    onSettled: () => {
+      // roda em sucesso OU erro
+      setBarcode('')        // limpa o campo
+      focusBarcode()        // volta o foco para o input
     },
     mutationKey: ['barcode'],
   })
