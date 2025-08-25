@@ -131,7 +131,7 @@ export default function Collects() {
             [0, 1].map((item) => <CardSkeleton key={item} />)
           ) : isFetched && !data.length ? (
             <div className="flex justify-center mt-4 text-2xl w-full">
-              Nenhum resultado encontrado
+              Apenas coletas com Status 'Liberada', 'Conferencia Liberada CS', 'Andamento'
             </div>
           ) : (
             data.map((report, index) => (
